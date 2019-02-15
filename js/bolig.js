@@ -1,10 +1,18 @@
 "use strict";
 
 
-// + can place pre-formatted .json files in google storage for most used data
 
 
-//$.ajax({ method: "POST", url: "http://localhost:3002", data: '[{"table": "HOUSE", "statement": "select * from house limit 10;"}]'}).then((r) => {console.log(r)});
+// sameFilter: "same as last"
+
+function sameFilter(ar) {
+    
+    const j = ar.findIndex(c => c > 0);
+    
+    ar[0] = (j >= 0) ? ar[j] : 0.01;
+        
+    return [ar[0]].concat(ar.map((c,i) => { if (c === 0) { ar[i] = ar[i-1]; }; return ar[i]; }).slice(1));
+}
 
 
 // source: https://beta.observablehq.com/@mbostock/d3-multi-line-chart
@@ -123,19 +131,114 @@ function multiLine(id, data) {
 }
 
 
-multiLine("multiline", data_unemployment);
+//multiLine("multiline", data_unemployment);
+
+// + can place pre-formatted .json files in google storage for most used data
 
 
+// NOTE possibly pre-generate this data monthly using cron, and store in google storage instaed of sqlite3
 
+// This is currently 72 tables - (or 36 tables?) => slimmed as only tid, omr20 and the y-value series is required.
+
+// Actually dates is a fixed table which can be placed in its own file
+
+// Use bash script with SQL call into a .csv file
+
+// Else simply use the original downloaded files, and filter
+
+// Browser: put in memory so downloads are only dones once
+
+// Zero values should be changed to "same as last"
 
 // ej1,ej2,ej3,bo1,bo2,geo1,geo2,omr20,tid,udbud,bb1,bb2,p1,p2,pris,bc1,bc2,salgstid,u1,u2,u3,qp1,qp2,qprice,qbo,qso,qtid
 
-sqlite3 house.db "select * from house where ej1=1 and bo1=1 and bb1=1 and bc1=1 and u1=1  and geo1>0 order by omr20,tid asc;" 
+//   const data = await d3.tsv("https://gist.githubusercontent.com/mbostock/8033015/raw/01e8225d4a65aca6c759fe4b8c77179f446c5815/unemployment.tsv", (d, i, columns) => {
+//     return {
+//       name: d.name.replace(/, ([\w-]+).*/, " $1"),
+//       values: columns.slice(1).map(k => +d[k])
+//     };
+//   });
+//   return {
+//     y: "% Unemployment",
+//     series: data,
+//     dates: data.columns.slice(1).map(d3.timeParse("%Y-%m"))
+//   };
+
+var stmt1 = "select * from house where ej2=1 and bo1=1 and bb1=1 and bc1=1 and u3=1 order by omr20,tid asc;";
+
+var data1 = [];
+
+$.ajax({ method: "POST", url: "http://localhost:3002", data: '[{"table": "HOUSE", "statement": "' + stmt1 + '"}]'}).then((r) => {
+    
+    r = _.groupBy(r, "omr20");
+        
+    let keys = Object.keys(r);
+    
+    let dates = r[keys[0]].map(c => new Date(c.tid));  // already sorted in sqlite3 call
+    
+    let selection = "qprice";
+    
+    let series = keys.map((c) => { return {"name": c, "values": sameFilter(r[c].map(b => b[selection])) }; });
+    
+    multiLine("multiline", {"dates": dates, "y": "m2 DKK price", "series": series});
+    
+});
+
+
+//multiLine("multiline", data1);
 
 
 
+// ej1=1: Hus
+// ej2=1: Ejerlejlighed
+// ej3=1: Fritidshus
+// 
+// bo1=1: Udbudte boliger
+// bo2=1: Nedtagne boliger
+// 
+// omr20: kommune, region, landsdel
+// 
+// tid: månedsdata
+// 
+// udbud: Antal boliger (bo1,bo2)
+// 
+// bb1=1: Nedtagningspriser
+// bb2=1: Udbudspriser
+// 
+// pris:   annonceret pris
+// 
+// bc1=1: Liggetider
+// bc2=1: Udbudstider
+// 
+// salgstid: Antal datge (bc1, bc2)
+// 
+// u1: Nedtagningspris
+// u2: Første udbudspris
+// u3: Realiseret handelspris
+// 
+// qprice: faktiske priser (u1,u2,u3)
+// 
+// qbo: Boliger til salg ultimo
+// 
+// qso: Solgte boliger
+// 
+// qtid: Salgstid i dage
+// 
+// 
+//   
 
 
+// Pr. område, se de forskellige priser
+
+// Sammenlign faktiske salgspriser med annoncerede priser
+
+// histogrammer
+
+// inkluder postnumre
+
+// Filtre: vælge områder mv.
+
+// vælg metricsgraphics til de få multi line grafikker
 
 
 
