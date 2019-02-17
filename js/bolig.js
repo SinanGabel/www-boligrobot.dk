@@ -129,10 +129,11 @@ function multiLine(id, data) {
 
     const path = svg.append("g")
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
+        .attr("class", "stroke-1")
+//         .attr("stroke", "steelblue")
+//         .attr("stroke-width", 1.5)
+//         .attr("stroke-linejoin", "round")
+//         .attr("stroke-linecap", "round")
     .selectAll("path")
     .data(data.series)
     .join("path")
@@ -154,18 +155,6 @@ function multiLine(id, data) {
 
 
 // ...
-
-//   const data = await d3.tsv("https://gist.githubusercontent.com/mbostock/8033015/raw/01e8225d4a65aca6c759fe4b8c77179f446c5815/unemployment.tsv", (d, i, columns) => {
-//     return {
-//       name: d.name.replace(/, ([\w-]+).*/, " $1"),
-//       values: columns.slice(1).map(k => +d[k])
-//     };
-//   });
-//   return {
-//     y: "% Unemployment",
-//     series: data,
-//     dates: data.columns.slice(1).map(d3.timeParse("%Y-%m"))
-//   };
 
 function draw(diag, obj) {
 
@@ -229,138 +218,6 @@ obj = {"id": "pris_fritidshus_kommune", "file": "pris-fritidshus-kommune.csv", "
 
 // dataDraw(obj);
 
-
-//multiLine("multiline", data_unemployment);
-
-// + can place pre-formatted .json files in google storage for most used data
-
-
-// NOTE possibly pre-generate this data monthly using cron, and store in google storage instaed of sqlite3
-
-// This is currently 72 tables - (or 36 tables?) => slimmed as only tid, omr20 and the y-value series is required.
-
-// Actually dates is a fixed table which can be placed in its own file
-
-// Use bash script with SQL call into a .csv file
-
-// Else simply use the original downloaded files, and filter
-
-// Browser: put in memory so downloads are only dones once
-
-// Zero values should be changed to "same as last"
-
-// ej1,ej2,ej3,bo1,bo2,geo1,geo2,omr20,tid,udbud,bb1,bb2,p1,p2,pris,bc1,bc2,salgstid,u1,u2,u3,qp1,qp2,qprice,qbo,qso,qtid
-
-//   const data = await d3.tsv("https://gist.githubusercontent.com/mbostock/8033015/raw/01e8225d4a65aca6c759fe4b8c77179f446c5815/unemployment.tsv", (d, i, columns) => {
-//     return {
-//       name: d.name.replace(/, ([\w-]+).*/, " $1"),
-//       values: columns.slice(1).map(k => +d[k])
-//     };
-//   });
-//   return {
-//     y: "% Unemployment",
-//     series: data,
-//     dates: data.columns.slice(1).map(d3.timeParse("%Y-%m"))
-//   };
-
-
-// BM
-
-// dataDraw({"statement": "select omr20,qprice from house where ej2=1 and bo1=1 and bb1=1 and bc1=1 and u3=1 order by omr20,tid asc;", "y_legend": "m2 DKK price", "key": "qprice" , "groupkey": "omr20", "info": {"dk": "Ejerlejligheder realiseret priser DKK/m2 i kommuner, regioner og landsdele", "en": "" }});
-// 
-// // // ikke nødvendig => brug UDB
-// // dataDraw({"statement": "select omr20,qprice from house where ej2=1 and bo1=1 and bb1=1 and bc1=1 and u2=1 order by omr20,tid asc;", "y_legend": "m2 DKK price", "key": "qprice" , "groupkey": "omr20", "info": {"dk": "Ejerlejligheder første udbudspriser DKK/m2 i kommuner, regioner og landsdele", "en": "" }});
-// // 
-// // // ikke nødvendig => brug UDB
-// // dataDraw({"statement": "select omr20,qprice from house where ej2=1 and bo1=1 and bb1=1 and bc1=1 and u1=1 order by omr20,tid asc;", "y_legend": "m2 DKK price", "key": "qprice" , "groupkey": "omr20", "info": {"dk": "Ejerlejligheder nedtagningspriser DKK/m2 i kommuner, regioner og landsdele", "en": "" }});
-// 
-// 
-// // UDB
-// 
-// dataDraw({"statement": "select omr20,pris from house where ej2=1 and bo1=1 and bb1=1 and bc1=1 and u3=1 order by omr20,tid asc;", "y_legend": "m2 DKK price", "key": "pris" , "groupkey": "omr20", "info": {"dk": "Ejerlejligheder annoncerede nedtagningspriser DKK/m2 i kommuner, regioner og landsdele", "en": "" }});
-// 
-// dataDraw({"statement": "select omr20,pris from house where ej2=1 and bo1=1 and bb2=1 and bc1=1 and u3=1 order by omr20,tid asc;", "y_legend": "m2 DKK price", "key": "pris" , "groupkey": "omr20", "info": {"dk": "Ejerlejligheder annoncerede udbudspriser DKK/m2 i kommuner, regioner og landsdele", "en": "" }});
-
-// TODO Forskel mellem faktiske priser, annoncerede nedtagningspriser, annoncerede udbudspriser. Medtag også postnumre.
-
-
-//multiLine("multiline", data1);
-
-
-
-// ej1=1: Hus
-// ej2=1: Ejerlejlighed
-// ej3=1: Fritidshus
-// 
-// bo1=1: Udbudte boliger
-// bo2=1: Nedtagne boliger
-// 
-// omr20: kommune, region, landsdel
-// 
-// tid: månedsdata
-// 
-// udbud: Antal boliger (bo1,bo2)
-// 
-// bb1=1: Nedtagningspriser
-// bb2=1: Udbudspriser
-// 
-// pris:   annonceret pris
-// 
-// bc1=1: Liggetider
-// bc2=1: Udbudstider
-// 
-// salgstid: Antal datge (bc1, bc2)
-// 
-// u1: Nedtagningspris
-// u2: Første udbudspris
-// u3: Realiseret handelspris
-// 
-// qprice: faktiske priser (u1,u2,u3)
-// 
-// qbo: Boliger til salg ultimo
-// 
-// qso: Solgte boliger
-// 
-// qtid: Salgstid i dage
-// 
-// 
-//   
-
-
-// Pr. område, se de forskellige priser
-
-// Sammenlign faktiske salgspriser med annoncerede priser
-
-// histogrammer
-
-// inkluder postnumre
-
-// Filtre: vælge områder mv.
-
-// vælg metricsgraphics til de få multi line grafikker
-
-
-// function dataDraw(obj) {
-//     
-//     var data1 = [];
-// 
-//     $.ajax({ method: "POST", url: "http://localhost:3002", data: '[{"table": "HOUSE", "statement": "' + obj.statement + '"}]'}).then((r) => {
-//         
-//         r = _.groupBy(r, obj.groupkey);
-//             
-//         let keys = Object.keys(r);
-//         
-//         //let dates = r[keys[0]].map(c => new Date(c.tid));  // already sorted in sqlite3 call
-//         
-//         // NOTE we know that all data starts with first date 2004M1
-//         let dates = r[keys[0]].map((c,i) => new Date(2004, i, 28));
-//                 
-//         let series = keys.map((c) => { return {"name": c, "values": sameFilter(r[c].map(b => b[obj.key])) }; });
-//         
-//         multiLine("multiline", {"dates": dates, "y": obj.y_legend, "series": series});
-//         
-//     });
-// }  
 
 
 
