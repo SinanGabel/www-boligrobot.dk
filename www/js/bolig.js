@@ -30,8 +30,32 @@ function sameFilter(ar) {
 }
 
 
+// ...
+
+function mgMultiLine(id, data) {
+    
+    MG.data_graphic({
+        title: "Multi-Line Chart",
+        description: "This line chart contains multiple lines.",
+        data: data,
+        width: 600,
+        height: 200,
+        right: 40,
+        target: ('#' + id),
+        legend: ['Line 1','Line 2','Line 3'],
+        legend_target: '.legend',
+        x_accessor: 't',
+        y_accessor: metric, 
+
+    });  
+}
+
+
 // source: https://beta.observablehq.com/@mbostock/d3-multi-line-chart
 
+// reponsive: https://ablesense.com/blogs/news/responsive-d3js-charts
+
+// https://web.archive.org/web/20160312004156/https://www.safaribooksonline.com/blog/2014/02/17/building-responsible-visualizations-d3-js/
      
 function multiLine(id, data) {
     
@@ -49,7 +73,7 @@ function multiLine(id, data) {
             .on("mouseenter", entered)
             .on("mouseleave", left);
 
-        const dot = svg.append("g")
+        var dot = svg.append("g")
             .attr("display", "none");
 
         dot.append("circle")
@@ -61,16 +85,22 @@ function multiLine(id, data) {
             .attr("y", -8);
 
         function moved() {
+            
             d3.event.preventDefault();
-            const ym = y.invert(d3.event.layerY);
-            const xm = x.invert(d3.event.layerX);
-            const i1 = d3.bisectLeft(data.dates, xm, 1);
-            const i0 = i1 - 1;
-            const i = xm - data.dates[i0] > data.dates[i1] - xm ? i1 : i0;
-            const s = data.series.reduce((a, b) => Math.abs(a.values[i] - ym) < Math.abs(b.values[i] - ym) ? a : b);
+            
+            var ym = y.invert(d3.event.layerY);
+            var xm = x.invert(d3.event.layerX);
+            var i1 = d3.bisectLeft(data.dates, xm, 1);
+            var i0 = i1 - 1;
+            var i = xm - data.dates[i0] > data.dates[i1] - xm ? i1 : i0;
+            var s = data.series.reduce((a, b) => Math.abs(a.values[i] - ym) < Math.abs(b.values[i] - ym) ? a : b);
+            
+            
             path.attr("stroke", d => d === s ? null : "#ddd").filter(d => d === s).raise();
-            dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`);
-            dot.select("text").text(s.name);
+            
+            dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`);  // orizontal and vertical translation
+            
+            dot.select("text").text(s.name + " DKK: " + s.values[i] + ", " + data.dates[i].toISOString().substring(0,7));            
         }
 
         function entered() {
@@ -83,25 +113,41 @@ function multiLine(id, data) {
             dot.attr("display", "none");
         }
     }
-
-
-    const width = 975;
-    const height = 600;
-    const margin = ({top: 20, right: 20, bottom: 30, left: 40});
-
-    const x = d3.scaleTime()
-        .domain(d3.extent(data.dates))
-        .range([margin.left, width - margin.right]);
-
-    const y = d3.scaleLinear()
+    
+    function resize() {
+        /* Update graph using new width and height (code below) */
+    
+        width = parseInt(d3.select("#" + id + "-child").style("width"));
+        x = d3.scaleTime()
+              .domain(d3.extent(data.dates))
+              .range([margin.left, width - margin.right]);
+              
+        height = parseInt(d3.select("#" + id + "-child").style("height"));
+        y = d3.scaleLinear()
         .domain([0, d3.max(data.series, d => d3.max(d.values))]).nice()
         .range([height - margin.bottom, margin.top]);
 
-    const xAxis = g => g
+        hover(svg, path);
+    }
+ 
+
+    var width = 975;
+    var height = 600;
+    var margin = ({top: 20, right: 20, bottom: 30, left: 40});
+
+    var x = d3.scaleTime()
+        .domain(d3.extent(data.dates))
+        .range([margin.left, width - margin.right]);
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(data.series, d => d3.max(d.values))]).nice()
+        .range([height - margin.bottom, margin.top]);
+
+    var xAxis = g => g
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0));
 
-    const yAxis = g => g
+    var yAxis = g => g
         .attr("transform", `translate(${margin.left},0)`)
         .call(d3.axisLeft(y))
         .call(g => g.select(".domain").remove())
@@ -111,15 +157,20 @@ function multiLine(id, data) {
             .attr("font-weight", "bold")
             .text(data.y));
 
-    const line = d3.line()
+    var line = d3.line()
         .defined(d => !isNaN(d))
         .x((d, i) => x(data.dates[i]))
         .y(d => y(d));
 
 
-    const svg = d3.select("#" + id).append("svg")
+    // <svg viewBox="0 0 975 600" preserveAspectRatio="xMidYMid">
+
+    var svg = d3.select("#" + id).append("svg")
+        .attr("id", id + "-child")
         .attr("width", width)
         .attr("height", height);
+//         .attr("viewBox", "0 0 975 600")
+//         .attr("preserveAspectRatio", "xMidYMid");
         
     svg.append("g")
         .call(xAxis);
@@ -127,7 +178,7 @@ function multiLine(id, data) {
     svg.append("g")
         .call(yAxis);
 
-    const path = svg.append("g")
+    var path = svg.append("g")
         .attr("fill", "none")
         .attr("class", "stroke-1")
 //         .attr("stroke", "steelblue")
@@ -145,12 +196,13 @@ function multiLine(id, data) {
         .attr("y", margin.top)
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
-        .text(data.title);    
+        .text(data.title);
 
     svg.call(hover, path);  // hover(svg, path);
 
     svg.node();
 
+//     d3.select(window).on('resize', resize);     
 }
 
 
