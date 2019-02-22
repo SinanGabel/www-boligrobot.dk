@@ -6,6 +6,24 @@ var storage = {};
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/";
 
 
+
+// ...
+
+function setOptionValue(id, val) {
+  var obj = document.getElementById(id), i = 0, j, l = obj.options.length;
+  
+  while(i < l) {
+    if (obj.options[i].value == val) {
+      j=i;
+      obj.selectedIndex = i; 
+      break;
+    }
+    i++;
+  }
+  return j; 
+};
+
+
 // ...
 
 function filter(obj, csv) {
@@ -30,22 +48,100 @@ function sameFilter(ar) {
 }
 
 
+// input: array of [omr20, pris]
+
+// output: array of 
+
+function preprocess(ar) {
+
+    let obj = {};
+    
+    let data = _.groupBy(ar, c => c[0]);  // f.eks. omr20 
+    
+    let keys = Object.keys(data);
+    
+    keys.forEach((c) => { 
+        
+    data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
+        
+    });
+    
+    return data;
+}
+
+
+
+// Multiple omr20 selections
+
+// select: []
+
+function makeData(obj, select) {
+    
+    let ar = storage[obj.id][select[0]].map((c,i) => { 
+        
+        let js = {};
+        
+        js.t = new Date(2004, i, 28);
+        
+        // j: omr20 index in select
+        select.forEach((d,j) => { js[d] = storage[obj.id][select[j]][i]; });
+        
+        return js;
+    }); 
+        
+    return ar;
+}
+    
+
+    // ...
+
+function draw(obj) {
+    
+    let data = [];
+    
+    if (obj.diagram === "multiline") {
+        
+//         let keys = Object.keys(storage[obj.id]);
+// 
+//         let series = keys.map((c) => { return { "name": c, "values": sameFilter( data[c].map(b => b["v"])) }; });
+//         
+//         if (! storage.hasOwnProperty("dates")) {
+//         
+//             // NOTE we know that all data starts with first date 2004M1, and data is sorted in sqlite3 by tid
+//             
+//             storage.dates = (series[0].values).map((c,i) => new Date(2004, i, 28));
+//         }
+// 
+//         multiLine("multiline", {"dates": storage.dates, "y": obj.y_legend, "title": obj.title, "series": series});
+        
+    } else if (obj.diagram === "mg-multiline") {
+        
+        let omraade = ["København", "Århus", "Landsdel Vest- og Sydsjælland"];
+        
+        data = makeData(obj, omraade);
+        
+        mgMultiLine("mg-multiline", data, omraade, obj.title);
+    }
+    
+    clearAction();
+}
+
+
+
 // ...
 
-function mgMultiLine(id, data) {
+function mgMultiLine(id, data, legend, title) {
     
     MG.data_graphic({
-        title: "Multi-Line Chart",
-        description: "This line chart contains multiple lines.",
+        title: title,
         data: data,
-        width: 600,
-        height: 200,
-        right: 40,
+        width: 966,
+        height: 600,
+        right: 220,
         target: ('#' + id),
-        legend: ['Line 1','Line 2','Line 3'],
-        legend_target: '.legend',
+        legend: legend,
         x_accessor: 't',
-        y_accessor: metric, 
+        y_accessor: legend
 
     });  
 }
@@ -208,72 +304,104 @@ function multiLine(id, data) {
 
 // ...
 
-function draw(diag, obj) {
-
-    if (diag === "multiline") {
-        
-        let data = storage[obj.id].map((c) => { return {"o": c[0], "v": Number(c[1])}; });
-        
-        data = _.groupBy(data, obj.groupkey);  // f.eks. omr20    
-
-        let keys = Object.keys(data);
-
-        let series = keys.map((c) => { return { "name": c, "values": sameFilter( data[c].map(b => b["v"])) }; });
-        
-        if (! storage.hasOwnProperty("dates")) {
-        
-            // NOTE we know that all data starts with first date 2004M1, and data is sorted in sqlite3 by tid
-            
-            storage.dates = (series[0].values).map((c,i) => new Date(2004, i, 28));
-        }
-
-        multiLine("multiline", {"dates": storage.dates, "y": obj.y_legend, "title": obj.title, "series": series});
-    }
-}
-
-
-// ...
-
 function dataDraw(obj) {
+    
+    // WARNING temporary during testing
+    
+//     storage[obj.id] = preprocess(qpris_hus_kommune[obj.id]);
+    
+    // ...
     
     if (storage.hasOwnProperty(obj.id)) {
         
-        draw("multiline", obj);
+        draw(obj);
         
         
     } else {    
 
         $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
             
-            storage[obj.id] = filter(obj, r);
+            // TODO
+            
+            storage[obj.id] = preprocess(filter(obj, r));
                         
-            draw("multiline", obj);
+            draw(obj);
             
         });
     }
 }  
 
 
-// obj: {statement: "sql statement", y_legend: "m2 DKK price", key: "price" , groupkey: "omr20" }
+// ...
 
-var obj = {"id": "pris_hus_kommune", "file": "pris-hus-kommune.csv", "title": "Realiseret huspriser (actual house prices)" ,"delimiter": "|", "y_legend": "DKK pris (price) /m2", "text": {"dk": "Parcel- og rækkehuse realiseret priser DKK/m2 i kommuner, regioner og landsdele", "en": "" }, "groupkey": "o", "key": "v"};
+function statistics(m) {
+    
+    setAction();
+    
+    setOptionValue("metric", m);
 
-dataDraw(obj);
+    let obj = {};
+    
+    let type = "hus";
+    
+    // title
+    
+    let title = "";
+
+    title = (m === "qpris") ? "handelspris" : m ;
+    
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    
+    // ...
+    
+    if (["qpris", "udbudspris", "nedtagningspris"].includes(m)) {
+                
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "DKK pris (price) /m2", "diagram": "mg-multiline"};
+
+    } else if (["udbudstid", "liggetid"].includes(m)) {
+        
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+
+    } else if (["udbud", "nedtagne"].includes(m)) {
+        
+        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+    } 
+
+    dataDraw(obj);
+}
 
 
-obj = {"id": "pris_lejlighed_kommune", "file": "pris-lejlighed-kommune.csv", "delimiter": "|", "y_legend": "DKK pris (price) /m2", "text": {"dk": "Ejerlejligheder realiseret priser DKK/m2 i kommuner, regioner og landsdele", "en": "" }, "groupkey": "o", "key": "v"};
+// Shows a modal dialog while fetching data
 
-// dataDraw(obj);
+function setAction(hideBackground) {
+    
+    let sd = document.getElementById("action").style;
+
+    sd.display = "block";
+
+    if (hideBackground) {
+        sd.opacity = "100";
+    } else {
+        sd.opacity = ".85";
+    }  
+
+    let el = document.createElement("i");
+        el.setAttribute("class", "fas fa-spinner fa-pulse fa-2x");
+    document.getElementById("msg").appendChild(el);
+}
 
 
-obj = {"id": "pris_fritidshus_kommune", "file": "pris-fritidshus-kommune.csv", "delimiter": "|", "y_legend": "DKK pris (price) /m2", "text": {"dk": "Fritidshuse realiseret priser DKK/m2 i kommuner, regioner og landsdele", "en": "" }, "groupkey": "o", "key": "v"};
+// Clears the modal dialog
 
-// dataDraw(obj);
+function clearAction() {
+    document.getElementById("msg").textContent = "";
+    document.getElementById("action").style.display = "none";
+}
 
 
+// init web side
 
-
-
+statistics("udbudspris");
 
 
 

@@ -17,31 +17,51 @@
 </head>
 <body>
 
-
-<div class="header">
-    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading">boligrobot.dk&#8480;</a>
-
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li>
-        </ul>
-    </div>
+<div id="action">
+    <div id="loading-icon"></div>
+    <div class="loading-msg" id="msg"></div>
 </div>
 
 
-<div class="content-wrapper">
-    
-    <div class="content">
-    
-        <p>Dette site er under konstruktion, vend snart tilbage igen (version 2019-02-17).<br>This site is being constructed please return soon again.</p>
-    
-        <h2 class="content-head is-center"><i class="fas fa-robot"></i> boligrobot.dk</h2>
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading">boligrobot.dk&#8480; beta</a>
 
-        <div class="pure-g" >
-            <div class="pure-u-1 pure-u-md-1-3"> <button class="pure-button" onclick="">Show diagram</button> </div>
-            <div class="pure-u-1 pure-u-md-1-3" id="mg-multiline">Diagram here.</div>
-            <div class="pure-u-1 pure-u-md-1-3"> ... </div>
-        </div>
+        <ul class="pure-menu-list">
+<!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
+            <li class="pure-menu-item"><a href="mailto:info@riskbutler.com?subject=boligrobot.dk" class="pure-menu-link">info@riskbutler.com</a></li>
+        </ul>
+    </div>
+</div>
+<br>
+
+<div class="content-wrapper">
+
+    <br>
+    
+    <div class="content">    
+        <form class="pure-form">
+            <fieldset class="pure-group">
+                <legend>Vælg, hvad du vil se nedenfor (please make your selections below).</legend>
+                
+                <br><br>
+
+                <label for="metric">Statistik (statistic) &nbsp;</label>
+                <select id="metric" onchange="statistics(this.value);">
+                    <option value="qpris">Faktisk handlet pris i DKK pr. m2 (quarterly, actual traded price)</option>
+                    <option value="udbudspris">Annonceret pris i DKK pr. m2 (price on internet)</option>
+                    <option value="nedtagningspris">Nedtagningspris i DKK pr. m2 (price when removed from internet)</option>
+                    <option value="udbudstid">Annoncetid i dage (days advertised on internet)</option>
+                    <option value="liggetid">Liggetid i dage (days advertised when removed from internet)</option>
+                    <option value="udbud">Antal udbudte boliger (homes for sale)</option>
+                    <option value="nedtagne">Antal nedtagne boliger (homes removed from internet)</option>
+                </select>
+            </fieldset>
+        </form>            
+        
+        <br><br>
+    
+        <svg viewbox="0 0 975 600" id="mg-multiline"></svg>
     </div>
     
         
@@ -56,7 +76,7 @@
                     boligrobot.dk
                 </h3>
                 <p>
-                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.<br><br>Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and country (summer) houses. Technical requirement is an updated internet browser. 
+                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.<br><br>Boligrobot.dk is a new site where you soon can get predictions on Danish houses, apartments and country (summer) houses. Technical requirement is an updated internet browser. 
                 </p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
@@ -85,7 +105,7 @@
     <div class="footer l-box is-center">
         boligrobot.dk er et service mærke leveret af <a href="//riskbutler.com">RiskButler.com</a>, København, udviklet af <a href="//dk.linkedin.com/in/sinangabel">Sinan Gabel</a>.<br>
         boligrobot.dk is a service brand delivered by <a href="//riskbutler.com">RiskButler.com</a>, Copenhagen, developed by <a href="//dk.linkedin.com/in/sinangabel">Sinan Gabel</a>.<br>
-        Copyright 2019 RiskButler.com
+        Copyright 2019 RiskButler.com &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
     </div>
 
 </div>
@@ -99,6 +119,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/metrics-graphics/2.15.6/metricsgraphics.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 
+<script src="js/data.js"></script>
 <script src="js/bolig.js"></script>
 
 

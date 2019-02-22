@@ -257,6 +257,47 @@ a.pure-button-primary {
   stroke-linejoin: round;
 }
 
+/* action */
+
+#action {
+  display: none;
+  position: fixed;
+  background-color: white;
+  opacity: 0.9;
+  filter: alpha(opacity=90);  /* for IE8 and prior */
+  font-size: 1.5em;
+  font-weight: bold;
+  width: 100%;
+  height: 1250px;
+  text-align: center;
+  color: black;
+  padding-top: 100px;
+  z-index: 99;
+}
+
+#action #msg {
+  position: relative;
+  margin: 0px auto;
+}
+
+#action #loading-icon {
+/*   background: url('../img/loader.gif'); */
+  position: relative;
+  margin: 0px auto;
+  width: 16px;
+  height: 11px;
+  margin-bottom: 15px;
+}
+
+.loading-msg {
+  /*font-family: "omnes-pro", sans-serif;*/
+  text-align: center;
+  font-weight: 300;
+  font-size: 2em;
+  color: #ff5722;
+}
+
+
 /*
  * -- TABLET (AND UP) MEDIA QUERIES --
  * On tablets and other medium-sized devices, we want to customize some
