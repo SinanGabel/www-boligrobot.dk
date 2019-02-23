@@ -1,7 +1,8 @@
 "use strict";
 
+const locations = ["Hele landet", "Region Hovedstaden", "Region Nordjylland", "Region Midtjylland", "Region Syddanmark", "Region Hovedstaden", "Region Sjælland", "Landsdel København by", "København", "Frederiksberg", "Dragør", "Tårnby", "Landsdel Københavns omegn", "Albertslund", "Ballerup", "Brøndby", "Gentofte", "Gladsaxe", "Glostrup", "Herlev", "Hvidovre", "Høje-Taastrup", "Ishøj", "Lyngby-Taarbæk", "Rødovre", "Vallensbæk", "Landsdel Nordsjælland", "Allerød", "Egedal", "Fredensborg", "Frederikssund", "Furesø", "Gribskov", "Halsnæs", "Helsingør", "Hillerød", "Hørsholm", "Rudersdal", "Landsdel Bornholm", "Bornholm", "Christiansø", "Landsdel Østsjælland", "Greve", "Køge", "Lejre", "Roskilde", "Solrød", "Landsdel Vest- og Sydsjælland", "Faxe", "Guldborgsund", "Holbæk", "Kalundborg", "Lolland", "Næstved", "Odsherred", "Ringsted", "Slagelse", "Sorø", "Stevns", "Vordingborg", "Landsdel Fyn", "Assens", "Faaborg-Midtfyn", "Kerteminde", "Langeland", "Middelfart", "Nordfyns", "Nyborg", "Odense", "Svendborg", "Ærø", "Landsdel Sydjylland", "Billund", "Esbjerg", "Fanø", "Fredericia", "Haderslev", "Kolding", "Sønderborg", "Tønder", "Varde", "Vejen", "Vejle", "Aabenraa", "Landsdel Østjylland", "Favrskov", "Hedensted", "Horsens", "Norddjurs", "Odder", "Randers", "Samsø", "Silkeborg", "Skanderborg", "Syddjurs", "Aarhus", "Landsdel Vestjylland", "Herning", "Holstebro", "Ikast-Brande", "Lemvig", "Ringkøbing-Skjern", "Skive", "Struer", "Viborg", "Landsdel Nordjylland", "Brønderslev", "Frederikshavn", "Hjørring", "Jammerbugt", "Læsø", "Mariagerfjord", "Morsø", "Rebild", "Thisted", "Vesthimmerlands", "Aalborg"];
 
-var storage = {};
+var storage = {}, omraade = [];
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/";
 
@@ -70,6 +71,38 @@ function preprocess(ar) {
 }
 
 
+// ..
+
+function updateLocation(omr) {
+    
+    if (omr === "reset") {
+        
+        omraade = [];
+        setOptionValue("location", "vaelg");
+        return;
+        
+    } else if (locations.includes(omr)) {
+        
+        omraade.push(omr);
+    
+    } else {
+    
+        omr = document.getElementById("location").value;
+        
+        if (locations.includes(omr)) {
+            
+            omraade.push(omr);
+        
+        } else {
+            
+            setOptionValue("location", "vaelg");
+        }
+    }
+        
+    statistics();
+}
+
+
 
 // Multiple omr20 selections
 
@@ -116,8 +149,8 @@ function draw(obj) {
         
     } else if (obj.diagram === "mg-multiline") {
         
-        let omraade = ["København", "Århus", "Landsdel Vest- og Sydsjælland"];
-        
+        if (omraade.length === 0) { omraade = ["Hele landet"]; }
+                
         data = makeData(obj, omraade);
         
         mgMultiLine("mg-multiline", data, omraade, obj.title);
@@ -144,6 +177,105 @@ function mgMultiLine(id, data, legend, title) {
         y_accessor: legend
 
     });  
+}
+
+
+// ...
+
+function dataDraw(obj) {
+    
+    // WARNING temporary during testing
+    
+//     storage[obj.id] = preprocess(qpris_hus_kommune[obj.id]);
+    
+    // ...
+    
+    if (storage.hasOwnProperty(obj.id)) {
+        
+        draw(obj);
+        
+        
+    } else {    
+
+        $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
+            
+            // TODO
+            
+            storage[obj.id] = preprocess(filter(obj, r));
+                        
+            draw(obj);
+            
+        });
+    }
+}  
+
+
+// ...
+
+function statistics(m, type) {
+    
+    setAction();
+    
+    m = m || document.getElementById("metric").value;
+    type = type || document.getElementById("boligtype").value;
+    
+    setOptionValue("metric", m);
+    setOptionValue("boligtype", type);
+
+    let obj = {};
+        
+    // title
+    
+    let title = "";
+
+    title = (m === "qpris") ? "handelspris" : m ;
+    
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    
+    // ...
+    
+    if (["qpris", "udbudspris", "nedtagningspris"].includes(m)) {
+                
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "DKK pris (price) /m2", "diagram": "mg-multiline"};
+
+    } else if (["udbudstid", "liggetid"].includes(m)) {
+        
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+
+    } else if (["udbud", "nedtagne"].includes(m)) {
+        
+        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+    } 
+
+    dataDraw(obj);
+}
+
+
+// Shows a modal dialog while fetching data
+
+function setAction(hideBackground) {
+    
+    let sd = document.getElementById("action").style;
+
+    sd.display = "block";
+
+    if (hideBackground) {
+        sd.opacity = "100";
+    } else {
+        sd.opacity = ".85";
+    }  
+
+    let el = document.createElement("i");
+        el.setAttribute("class", "fas fa-spinner fa-pulse fa-2x");
+    document.getElementById("msg").appendChild(el);
+}
+
+
+// Clears the modal dialog
+
+function clearAction() {
+    document.getElementById("msg").textContent = "";
+    document.getElementById("action").style.display = "none";
 }
 
 
@@ -301,107 +433,6 @@ function multiLine(id, data) {
 //     d3.select(window).on('resize', resize);     
 }
 
-
-// ...
-
-function dataDraw(obj) {
-    
-    // WARNING temporary during testing
-    
-//     storage[obj.id] = preprocess(qpris_hus_kommune[obj.id]);
-    
-    // ...
-    
-    if (storage.hasOwnProperty(obj.id)) {
-        
-        draw(obj);
-        
-        
-    } else {    
-
-        $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
-            
-            // TODO
-            
-            storage[obj.id] = preprocess(filter(obj, r));
-                        
-            draw(obj);
-            
-        });
-    }
-}  
-
-
-// ...
-
-function statistics(m) {
-    
-    setAction();
-    
-    setOptionValue("metric", m);
-
-    let obj = {};
-    
-    let type = "hus";
-    
-    // title
-    
-    let title = "";
-
-    title = (m === "qpris") ? "handelspris" : m ;
-    
-    title = title.charAt(0).toUpperCase() + title.slice(1);
-    
-    // ...
-    
-    if (["qpris", "udbudspris", "nedtagningspris"].includes(m)) {
-                
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "DKK pris (price) /m2", "diagram": "mg-multiline"};
-
-    } else if (["udbudstid", "liggetid"].includes(m)) {
-        
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
-
-    } else if (["udbud", "nedtagne"].includes(m)) {
-        
-        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
-    } 
-
-    dataDraw(obj);
-}
-
-
-// Shows a modal dialog while fetching data
-
-function setAction(hideBackground) {
-    
-    let sd = document.getElementById("action").style;
-
-    sd.display = "block";
-
-    if (hideBackground) {
-        sd.opacity = "100";
-    } else {
-        sd.opacity = ".85";
-    }  
-
-    let el = document.createElement("i");
-        el.setAttribute("class", "fas fa-spinner fa-pulse fa-2x");
-    document.getElementById("msg").appendChild(el);
-}
-
-
-// Clears the modal dialog
-
-function clearAction() {
-    document.getElementById("msg").textContent = "";
-    document.getElementById("action").style.display = "none";
-}
-
-
-// init web side
-
-statistics("udbudspris");
 
 
 

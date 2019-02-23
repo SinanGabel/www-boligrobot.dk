@@ -38,6 +38,19 @@ label {
     color: #34495e;
 }
 
+/* LVHA-order: :link — :visited — :hover — :active. */
+
+a:link, a:visited, a:active {
+    text-decoration:none;
+    color:#795548;
+}
+
+a:hover {
+    text-decoration:none;
+    color: #ff5722;
+    background:rgb(220,220,220);
+}
+
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
@@ -85,18 +98,18 @@ label {
  * I want my pure-button elements to look a little different
  */
 .pure-button {
-    background-color: #1f8dd6;
+    background-color: #c2bcbc;
     color: white;
     padding: 0.5em 2em;
     border-radius: 5px;
 }
 
-a.pure-button-primary {
+/*a.pure-button-primary {
     background: white;
     color: #1f8dd6;
     border-radius: 5px;
     font-size: 120%;
-}
+}*/
 
 
 /*
