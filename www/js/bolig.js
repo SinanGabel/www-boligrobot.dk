@@ -1,8 +1,11 @@
 "use strict";
 
-const locations = ["Hele landet", "Region Hovedstaden", "Region Nordjylland", "Region Midtjylland", "Region Syddanmark", "Region Hovedstaden", "Region Sjælland", "Landsdel København by", "København", "Frederiksberg", "Dragør", "Tårnby", "Landsdel Københavns omegn", "Albertslund", "Ballerup", "Brøndby", "Gentofte", "Gladsaxe", "Glostrup", "Herlev", "Hvidovre", "Høje-Taastrup", "Ishøj", "Lyngby-Taarbæk", "Rødovre", "Vallensbæk", "Landsdel Nordsjælland", "Allerød", "Egedal", "Fredensborg", "Frederikssund", "Furesø", "Gribskov", "Halsnæs", "Helsingør", "Hillerød", "Hørsholm", "Rudersdal", "Landsdel Bornholm", "Bornholm", "Christiansø", "Landsdel Østsjælland", "Greve", "Køge", "Lejre", "Roskilde", "Solrød", "Landsdel Vest- og Sydsjælland", "Faxe", "Guldborgsund", "Holbæk", "Kalundborg", "Lolland", "Næstved", "Odsherred", "Ringsted", "Slagelse", "Sorø", "Stevns", "Vordingborg", "Landsdel Fyn", "Assens", "Faaborg-Midtfyn", "Kerteminde", "Langeland", "Middelfart", "Nordfyns", "Nyborg", "Odense", "Svendborg", "Ærø", "Landsdel Sydjylland", "Billund", "Esbjerg", "Fanø", "Fredericia", "Haderslev", "Kolding", "Sønderborg", "Tønder", "Varde", "Vejen", "Vejle", "Aabenraa", "Landsdel Østjylland", "Favrskov", "Hedensted", "Horsens", "Norddjurs", "Odder", "Randers", "Samsø", "Silkeborg", "Skanderborg", "Syddjurs", "Aarhus", "Landsdel Vestjylland", "Herning", "Holstebro", "Ikast-Brande", "Lemvig", "Ringkøbing-Skjern", "Skive", "Struer", "Viborg", "Landsdel Nordjylland", "Brønderslev", "Frederikshavn", "Hjørring", "Jammerbugt", "Læsø", "Mariagerfjord", "Morsø", "Rebild", "Thisted", "Vesthimmerlands", "Aalborg"];
 
-var storage = {}, omraade = [];
+// name: Aarhus (geo), value: Århus (udb, bm)
+
+const locations = ["Hele landet", "Region Hovedstaden", "Region Nordjylland", "Region Midtjylland", "Region Syddanmark", "Region Sjælland", "Landsdel København by", "København", "Frederiksberg", "Dragør", "Tårnby", "Landsdel Københavns omegn", "Albertslund", "Ballerup", "Brøndby", "Gentofte", "Gladsaxe", "Glostrup", "Herlev", "Hvidovre", "Høje-Taastrup", "Ishøj", "Lyngby-Taarbæk", "Rødovre", "Vallensbæk", "Landsdel Nordsjælland", "Allerød", "Egedal", "Fredensborg", "Frederikssund", "Furesø", "Gribskov", "Halsnæs", "Helsingør", "Hillerød", "Hørsholm", "Rudersdal", "Landsdel Bornholm", "Bornholm", "Christiansø", "Landsdel Østsjælland", "Greve", "Køge", "Lejre", "Roskilde", "Solrød", "Landsdel Vest- og Sydsjælland", "Faxe", "Guldborgsund", "Holbæk", "Kalundborg", "Lolland", "Næstved", "Odsherred", "Ringsted", "Slagelse", "Sorø", "Stevns", "Vordingborg", "Landsdel Fyn", "Assens", "Faaborg-Midtfyn", "Kerteminde", "Langeland", "Middelfart", "Nordfyns", "Nyborg", "Odense", "Svendborg", "Ærø", "Landsdel Sydjylland", "Billund", "Esbjerg", "Fanø", "Fredericia", "Haderslev", "Kolding", "Sønderborg", "Tønder", "Varde", "Vejen", "Vejle", "Aabenraa", "Landsdel Østjylland", "Favrskov", "Hedensted", "Horsens", "Norddjurs", "Odder", "Randers", "Samsø", "Silkeborg", "Skanderborg", "Syddjurs", "Århus", "Landsdel Vestjylland", "Herning", "Holstebro", "Ikast-Brande", "Lemvig", "Ringkøbing-Skjern", "Skive", "Struer", "Viborg", "Landsdel Nordjylland", "Brønderslev", "Frederikshavn", "Hjørring", "Jammerbugt", "Læsø", "Mariagerfjord", "Morsø", "Rebild", "Thisted", "Vesthimmerlands", "Aalborg"];
+
+var storage = {}, omraade = [], graphdata = [];
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/";
 
@@ -63,7 +66,7 @@ function preprocess(ar) {
     
     keys.forEach((c) => { 
         
-    data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
+        data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
         
     });
     
@@ -78,7 +81,11 @@ function updateLocation(omr) {
     if (omr === "reset") {
         
         omraade = [];
+        graphdata = [];
+        
         setOptionValue("location", "vaelg");
+        
+        clearAction();
         return;
         
     } else if (locations.includes(omr)) {
@@ -110,27 +117,49 @@ function updateLocation(omr) {
 
 function makeData(obj, select) {
     
-    let ar = storage[obj.id][select[0]].map((c,i) => { 
+    let ar = [], diff = [];
+    
+    if (graphdata.length > 0) {
         
-        let js = {};
+        diff = _.difference(select, Object.keys(graphdata[0]));
         
-        js.t = new Date(2004, i, 28);
+        if (diff.length > 0) {
+            
+            graphdata = graphdata.map((c,i) => { 
+                
+                let js = {};
+                
+                // j: omr20 index in select
+                diff.forEach((d,j) => {  js[d] = storage[obj.id][diff[j]][i]; });
+                
+                return Object.assign(c, js);
+            });
+        }    
         
-        // j: omr20 index in select
-        select.forEach((d,j) => { js[d] = storage[obj.id][select[j]][i]; });
+        return graphdata;
         
-        return js;
-    }); 
+    } else {
+    
+        graphdata = storage[obj.id][select[0]].map((c,i) => { 
         
-    return ar;
+            let js = {};
+            
+            js.t = new Date(2004, i, 28);
+            
+            // j: omr20 index in select
+            select.forEach((d,j) => { js[d] = storage[obj.id][select[j]][i]; });
+            
+            return js;
+        });
+        
+        return graphdata;
+    }    
 }
     
 
-    // ...
+// ...
 
 function draw(obj) {
-    
-    let data = [];
     
     if (obj.diagram === "multiline") {
         
@@ -150,15 +179,12 @@ function draw(obj) {
     } else if (obj.diagram === "mg-multiline") {
         
         if (omraade.length === 0) { omraade = ["Hele landet"]; }
-                
-        data = makeData(obj, omraade);
         
-        mgMultiLine("mg-multiline", data, omraade, obj.title);
+        mgMultiLine("mg-multiline", makeData(obj, omraade), omraade, obj.title);
     }
     
-    clearAction();
+    _.delay(clearAction, 500);
 }
-
 
 
 // ...
@@ -184,24 +210,17 @@ function mgMultiLine(id, data, legend, title) {
 
 function dataDraw(obj) {
     
-    // WARNING temporary during testing
-    
-//     storage[obj.id] = preprocess(qpris_hus_kommune[obj.id]);
-    
-    // ...
-    
     if (storage.hasOwnProperty(obj.id)) {
         
         draw(obj);
         
-        
     } else {    
 
         $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
+                        
+            r = filter(obj, r);
             
-            // TODO
-            
-            storage[obj.id] = preprocess(filter(obj, r));
+            storage[obj.id] = preprocess(r);
                         
             draw(obj);
             
@@ -214,8 +233,6 @@ function dataDraw(obj) {
 
 function statistics(m, type) {
     
-    setAction();
-    
     m = m || document.getElementById("metric").value;
     type = type || document.getElementById("boligtype").value;
     
@@ -226,7 +243,7 @@ function statistics(m, type) {
         
     // title
     
-    let title = "";
+    let title = "", y_legend = "";
 
     title = (m === "qpris") ? "handelspris" : m ;
     
@@ -235,16 +252,28 @@ function statistics(m, type) {
     // ...
     
     if (["qpris", "udbudspris", "nedtagningspris"].includes(m)) {
+        
+        y_legend = ", DKK pr. m2 (price/m2)";
+        
+        title = title + " " + y_legend;
                 
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "DKK pris (price) /m2", "diagram": "mg-multiline"};
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
 
     } else if (["udbudstid", "liggetid"].includes(m)) {
+
+        y_legend = ", antal dage (# days)";
         
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+        title = title + " " + y_legend;
+        
+        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
 
     } else if (["udbud", "nedtagne"].includes(m)) {
+
+        y_legend = ", antal boliger (# homes)";
         
-        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": "Antal dage (# days)", "diagram": "mg-multiline"};
+        title = title + " " + y_legend;
+        
+        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
     } 
 
     dataDraw(obj);
@@ -274,6 +303,7 @@ function setAction(hideBackground) {
 // Clears the modal dialog
 
 function clearAction() {
+    
     document.getElementById("msg").textContent = "";
     document.getElementById("action").style.display = "none";
 }

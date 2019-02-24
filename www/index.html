@@ -43,10 +43,10 @@
         <form class="pure-form pure-g">
             <fieldset>
                 
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3 pure-u-xl-1-4">
                 <label for="boligtype">Boligtype (home type) &nbsp;</label>
-                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3">
-                <select id="boligtype" onchange="statistics(null, this.value);">
+                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3 pure-u-xl-3-4">
+                <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
                   <optgroup label="enkelt (single)">
                     <option value="lejlighed">Lejlighed (apartment)</option>
                     <option value="hus">Hus (house)</option>
@@ -61,10 +61,10 @@
                 </select>
                 </div>
                 
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3  pure-u-xl-1-4">
                 <label for="metric">Bolig statistik (home statistics) &nbsp;</label>
-                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3">
-                <select id="metric" onchange="statistics(this.value, null);">
+                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
+                <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
                   <optgroup label="internet annonceret (advertised)">
                     <option value="udbudspris">Udbudspris i DKK pr. m2 (price/m2)</option>
                     <option value="udbudstid">Annoncetid i dage (days advertised)</option>
@@ -83,12 +83,12 @@
                 
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3  pure-u-xl-1-4">
                 <label for="location">Område (location) &nbsp;</label>
-                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3">
-                <select id="location" onchange="updateLocation(this.value);">
+                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
+                <select id="location" onchange="setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>
-                <option value="Hele landet">Hele landet</option><option value="Region Hovedstaden">Region Hovedstaden</option><option value="Region Nordjylland">Region Nordjylland</option><option value="Region Midtjylland">Region Midtjylland</option><option value="Region Syddanmark">Region Syddanmark</option><option value="Region Hovedstaden">Region Hovedstaden</option><option value="Region Sjælland">Region Sjælland</option>
+                <option value="Hele landet">Hele landet</option><option value="Region Hovedstaden">Region Hovedstaden</option><option value="Region Midtjylland">Region Midtjylland</option><option value="Region Syddanmark">Region Syddanmark</option><option value="Region Nordjylland">Region Nordjylland</option><option value="Region Sjælland">Region Sjælland</option>
                 <optgroup label="Landsdel København by">
                     <option value="Landsdel København by">Landsdel København by</option><option value="København">København</option><option value="Frederiksberg">Frederiksberg</option><option value="Dragør">Dragør</option><option value="Tårnby">Tårnby</option>
                 </optgroup>
@@ -96,32 +96,34 @@
                     
                     <option value="Landsdel Københavns omegn">Landsdel Københavns omegn</option><option value="Albertslund">Albertslund</option><option value="Ballerup">Ballerup</option><option value="Brøndby">Brøndby</option><option value="Gentofte">Gentofte</option><option value="Gladsaxe">Gladsaxe</option><option value="Glostrup">Glostrup</option><option value="Herlev">Herlev</option><option value="Hvidovre">Hvidovre</option><option value="Høje-Taastrup">Høje-Taastrup</option><option value="Ishøj">Ishøj</option><option value="Lyngby-Taarbæk">Lyngby-Taarbæk</option><option value="Rødovre">Rødovre</option><option value="Vallensbæk">Vallensbæk</option>
                 </optgroup>
+<!--                 NOTE: value:Århus name:Aarhus -->
+                <optgroup label="Landsdel Østjylland">
+                    <option value="Landsdel Østjylland">Landsdel Østjylland</option><option value="Favrskov">Favrskov</option><option value="Hedensted">Hedensted</option><option value="Horsens">Horsens</option><option value="Norddjurs">Norddjurs</option><option value="Odder">Odder</option><option value="Randers">Randers</option><option value="Samsø">Samsø</option><option value="Silkeborg">Silkeborg</option><option value="Skanderborg">Skanderborg</option><option value="Syddjurs">Syddjurs</option><option value="Århus">Aarhus</option>
+                </optgroup>
+                <optgroup label="Landsdel Nordjylland">
+                    <option value="Landsdel Nordjylland">Landsdel Nordjylland</option><option value="Brønderslev">Brønderslev</option><option value="Frederikshavn">Frederikshavn</option><option value="Hjørring">Hjørring</option><option value="Jammerbugt">Jammerbugt</option><option value="Læsø">Læsø</option><option value="Mariagerfjord">Mariagerfjord</option><option value="Morsø">Morsø</option><option value="Rebild">Rebild</option><option value="Thisted">Thisted</option><option value="Vesthimmerlands">Vesthimmerlands</option><option value="Aalborg">Aalborg</option>
+                </optgroup>
                 <optgroup label="Landsdel Nordsjælland">
                     <option value="Landsdel Nordsjælland">Landsdel Nordsjælland</option><option value="Allerød">Allerød</option><option value="Egedal">Egedal</option><option value="Fredensborg">Fredensborg</option><option value="Frederikssund">Frederikssund</option><option value="Furesø">Furesø</option><option value="Gribskov">Gribskov</option><option value="Halsnæs">Halsnæs</option><option value="Helsingør">Helsingør</option><option value="Hillerød">Hillerød</option><option value="Hørsholm">Hørsholm</option><option value="Rudersdal">Rudersdal</option>
                 </optgroup>
-                <optgroup label="Landsdel Bornholm">
-                    <option value="Landsdel Bornholm">Landsdel Bornholm</option><option value="Bornholm">Bornholm</option><option value="Christiansø">Christiansø</option>
-                </optgroup>
-                <optgroup label="Landsdel Østsjælland">
-                    <option value="Landsdel Østsjælland">Landsdel Østsjælland</option><option value="Greve">Greve</option><option value="Køge">Køge</option><option value="Lejre">Lejre</option><option value="Roskilde">Roskilde</option><option value="Solrød">Solrød</option>
-                     </optgroup>
                 <optgroup label="Landsdel Vest- og Sydsjælland">
                <option value="Landsdel Vest- og Sydsjælland">Landsdel Vest- og Sydsjælland</option><option value="Faxe">Faxe</option><option value="Guldborgsund">Guldborgsund</option><option value="Holbæk">Holbæk</option><option value="Kalundborg">Kalundborg</option><option value="Lolland">Lolland</option><option value="Næstved">Næstved</option><option value="Odsherred">Odsherred</option><option value="Ringsted">Ringsted</option><option value="Slagelse">Slagelse</option><option value="Sorø">Sorø</option><option value="Stevns">Stevns</option><option value="Vordingborg">Vordingborg</option>
-                </optgroup>
-                <optgroup label="Landsdel Fyn">
-                    <option value="Landsdel Fyn">Landsdel Fyn</option><option value="Assens">Assens</option><option value="Faaborg-Midtfyn">Faaborg-Midtfyn</option><option value="Kerteminde">Kerteminde</option><option value="Langeland">Langeland</option><option value="Middelfart">Middelfart</option><option value="Nordfyns">Nordfyns</option><option value="Nyborg">Nyborg</option><option value="Odense">Odense</option><option value="Svendborg">Svendborg</option><option value="Ærø">Ærø</option>
                 </optgroup>
                 <optgroup label="Landsdel Sydjylland">
                     <option value="Landsdel Sydjylland">Landsdel Sydjylland</option><option value="Billund">Billund</option><option value="Esbjerg">Esbjerg</option><option value="Fanø">Fanø</option><option value="Fredericia">Fredericia</option><option value="Haderslev">Haderslev</option><option value="Kolding">Kolding</option><option value="Sønderborg">Sønderborg</option><option value="Tønder">Tønder</option><option value="Varde">Varde</option><option value="Vejen">Vejen</option><option value="Vejle">Vejle</option><option value="Aabenraa">Aabenraa</option>
                 </optgroup>
-                <optgroup label="Landsdel Østjylland">
-                    <option value="Landsdel Østjylland">Landsdel Østjylland</option><option value="Favrskov">Favrskov</option><option value="Hedensted">Hedensted</option><option value="Horsens">Horsens</option><option value="Norddjurs">Norddjurs</option><option value="Odder">Odder</option><option value="Randers">Randers</option><option value="Samsø">Samsø</option><option value="Silkeborg">Silkeborg</option><option value="Skanderborg">Skanderborg</option><option value="Syddjurs">Syddjurs</option><option value="Aarhus">Aarhus</option>
+                <optgroup label="Landsdel Fyn">
+                    <option value="Landsdel Fyn">Landsdel Fyn</option><option value="Assens">Assens</option><option value="Faaborg-Midtfyn">Faaborg-Midtfyn</option><option value="Kerteminde">Kerteminde</option><option value="Langeland">Langeland</option><option value="Middelfart">Middelfart</option><option value="Nordfyns">Nordfyns</option><option value="Nyborg">Nyborg</option><option value="Odense">Odense</option><option value="Svendborg">Svendborg</option><option value="Ærø">Ærø</option>
                 </optgroup>
                 <optgroup label="Landsdel Vestjylland">
                     <option value="Landsdel Vestjylland">Landsdel Vestjylland</option><option value="Herning">Herning</option><option value="Holstebro">Holstebro</option><option value="Ikast-Brande">Ikast-Brande</option><option value="Lemvig">Lemvig</option><option value="Ringkøbing-Skjern">Ringkøbing-Skjern</option><option value="Skive">Skive</option><option value="Struer">Struer</option><option value="Viborg">Viborg</option>
                 </optgroup>
-                <optgroup label="Landsdel Nordjylland">
-                    <option value="Landsdel Nordjylland">Landsdel Nordjylland</option><option value="Brønderslev">Brønderslev</option><option value="Frederikshavn">Frederikshavn</option><option value="Hjørring">Hjørring</option><option value="Jammerbugt">Jammerbugt</option><option value="Læsø">Læsø</option><option value="Mariagerfjord">Mariagerfjord</option><option value="Morsø">Morsø</option><option value="Rebild">Rebild</option><option value="Thisted">Thisted</option><option value="Vesthimmerlands">Vesthimmerlands</option><option value="Aalborg">Aalborg</option>
+                <optgroup label="Landsdel Østsjælland">
+                    <option value="Landsdel Østsjælland">Landsdel Østsjælland</option><option value="Greve">Greve</option><option value="Køge">Køge</option><option value="Lejre">Lejre</option><option value="Roskilde">Roskilde</option><option value="Solrød">Solrød</option>
+                </optgroup>
+                <optgroup label="Landsdel Bornholm">
+                    <option value="Landsdel Bornholm">Landsdel Bornholm</option><option value="Bornholm">Bornholm</option><option value="Christiansø" disabled>Christiansø (no data)</option>
+                </optgroup>
                 </select>
                 <button type="button" class="pure-button" onclick="updateLocation('reset');">reset</button>
                 </div>
@@ -129,7 +131,9 @@
             </fieldset>
         </form>            
         
-        <br><hr><br>
+        <br>
+        <p>Grafikken kan tage nogle sekunder om at opdatere (the diagram may take a few seconds to update).</p>
+        <hr><br>
     
         <svg viewbox="0 0 975 600" id="mg-multiline"></svg>
     </div>
