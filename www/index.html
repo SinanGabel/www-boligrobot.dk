@@ -66,17 +66,19 @@
                 </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
                 <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
                   <optgroup label="internet annonceret (advertised)">
-                    <option value="udbudspris">Udbudspris i DKK pr. m2 (price/m2)</option>
-                    <option value="udbudstid">Annoncetid i dage (days advertised)</option>
+                    <option value="udbud-pris">Udbudspris i DKK pr. m2 (price/m2)</option>
+                    <option value="udbud-tid">Annoncetid i dage (days advertised)</option>
                     <option value="udbud">Boliger til salg (# homes for sale)</option>
                  </optgroup>
                  <optgroup label="annoncestop (no longer advertised)">
-                    <option value="nedtagningspris">Nedtagningspris i DKK pr. m2 (price/m2 at removal time)</option>
-                    <option value="liggetid">Annnoncetid i dage (days advertised)</option>
+                    <option value="nedtagne-pris">Nedtagningspris i DKK pr. m2 (price/m2 at removal time)</option>
+                    <option value="nedtagne-tid">Annnoncetid i dage (days advertised)</option>
                     <option value="nedtagne">Antal boliger (# homes)</option>
                  </optgroup>
                   <optgroup label="faktiske handler (actual trades)">
-                    <option value="qpris">Handelspris i DKK pr. m2 (trading price/m2)</option>
+                    <option value="pris">Handelspris i DKK pr. m2 (trading price/m2)</option>
+                    <option value="salg">Antal solgte (# of trades)</option>
+                    <option value="salgstid">Salgstid i dage (sales time in days)</option>
                  </optgroup>
                 </select>
                 </div>
@@ -96,9 +98,8 @@
                     
                     <option value="Landsdel Københavns omegn">Landsdel Københavns omegn</option><option value="Albertslund">Albertslund</option><option value="Ballerup">Ballerup</option><option value="Brøndby">Brøndby</option><option value="Gentofte">Gentofte</option><option value="Gladsaxe">Gladsaxe</option><option value="Glostrup">Glostrup</option><option value="Herlev">Herlev</option><option value="Hvidovre">Hvidovre</option><option value="Høje-Taastrup">Høje-Taastrup</option><option value="Ishøj">Ishøj</option><option value="Lyngby-Taarbæk">Lyngby-Taarbæk</option><option value="Rødovre">Rødovre</option><option value="Vallensbæk">Vallensbæk</option>
                 </optgroup>
-<!--                 NOTE: value:Århus name:Aarhus -->
                 <optgroup label="Landsdel Østjylland">
-                    <option value="Landsdel Østjylland">Landsdel Østjylland</option><option value="Favrskov">Favrskov</option><option value="Hedensted">Hedensted</option><option value="Horsens">Horsens</option><option value="Norddjurs">Norddjurs</option><option value="Odder">Odder</option><option value="Randers">Randers</option><option value="Samsø">Samsø</option><option value="Silkeborg">Silkeborg</option><option value="Skanderborg">Skanderborg</option><option value="Syddjurs">Syddjurs</option><option value="Århus">Aarhus</option>
+                    <option value="Landsdel Østjylland">Landsdel Østjylland</option><option value="Favrskov">Favrskov</option><option value="Hedensted">Hedensted</option><option value="Horsens">Horsens</option><option value="Norddjurs">Norddjurs</option><option value="Odder">Odder</option><option value="Randers">Randers</option><option value="Samsø">Samsø</option><option value="Silkeborg">Silkeborg</option><option value="Skanderborg">Skanderborg</option><option value="Syddjurs">Syddjurs</option><option value="Aarhus">Aarhus</option>
                 </optgroup>
                 <optgroup label="Landsdel Nordjylland">
                     <option value="Landsdel Nordjylland">Landsdel Nordjylland</option><option value="Brønderslev">Brønderslev</option><option value="Frederikshavn">Frederikshavn</option><option value="Hjørring">Hjørring</option><option value="Jammerbugt">Jammerbugt</option><option value="Læsø">Læsø</option><option value="Mariagerfjord">Mariagerfjord</option><option value="Morsø">Morsø</option><option value="Rebild">Rebild</option><option value="Thisted">Thisted</option><option value="Vesthimmerlands">Vesthimmerlands</option><option value="Aalborg">Aalborg</option>

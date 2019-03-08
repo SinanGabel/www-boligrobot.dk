@@ -5,9 +5,9 @@
 
 const locations = ["Hele landet", "Region Hovedstaden", "Region Nordjylland", "Region Midtjylland", "Region Syddanmark", "Region Sjælland", "Landsdel København by", "København", "Frederiksberg", "Dragør", "Tårnby", "Landsdel Københavns omegn", "Albertslund", "Ballerup", "Brøndby", "Gentofte", "Gladsaxe", "Glostrup", "Herlev", "Hvidovre", "Høje-Taastrup", "Ishøj", "Lyngby-Taarbæk", "Rødovre", "Vallensbæk", "Landsdel Nordsjælland", "Allerød", "Egedal", "Fredensborg", "Frederikssund", "Furesø", "Gribskov", "Halsnæs", "Helsingør", "Hillerød", "Hørsholm", "Rudersdal", "Landsdel Bornholm", "Bornholm", "Christiansø", "Landsdel Østsjælland", "Greve", "Køge", "Lejre", "Roskilde", "Solrød", "Landsdel Vest- og Sydsjælland", "Faxe", "Guldborgsund", "Holbæk", "Kalundborg", "Lolland", "Næstved", "Odsherred", "Ringsted", "Slagelse", "Sorø", "Stevns", "Vordingborg", "Landsdel Fyn", "Assens", "Faaborg-Midtfyn", "Kerteminde", "Langeland", "Middelfart", "Nordfyns", "Nyborg", "Odense", "Svendborg", "Ærø", "Landsdel Sydjylland", "Billund", "Esbjerg", "Fanø", "Fredericia", "Haderslev", "Kolding", "Sønderborg", "Tønder", "Varde", "Vejen", "Vejle", "Aabenraa", "Landsdel Østjylland", "Favrskov", "Hedensted", "Horsens", "Norddjurs", "Odder", "Randers", "Samsø", "Silkeborg", "Skanderborg", "Syddjurs", "Århus", "Landsdel Vestjylland", "Herning", "Holstebro", "Ikast-Brande", "Lemvig", "Ringkøbing-Skjern", "Skive", "Struer", "Viborg", "Landsdel Nordjylland", "Brønderslev", "Frederikshavn", "Hjørring", "Jammerbugt", "Læsø", "Mariagerfjord", "Morsø", "Rebild", "Thisted", "Vesthimmerlands", "Aalborg"];
 
-var storage = {}, omraade = [], graphdata = [];
+var storage = {}, dates = {}, omraade = [], graphdata = [];
 
-const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/";
+const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
 
 
 
@@ -40,16 +40,16 @@ function filter(obj, csv) {
 }
 
 
-// sameFilter: "same as last"
-
-function sameFilter(ar) {
-    
-    const j = ar.findIndex(c => c > 0);
-    
-    ar[0] = (j >= 0) ? ar[j] : 0.01;
-        
-    return [ar[0]].concat(ar.map((c,i) => { if (c === 0) { ar[i] = ar[i-1]; }; return ar[i]; }).slice(1));
-}
+// // sameFilter: "same as last"
+// 
+// function sameFilter(ar) {
+//     
+//     const j = ar.findIndex(c => c > 0);
+//     
+//     ar[0] = (j >= 0) ? ar[j] : 0.01;
+//         
+//     return [ar[0]].concat(ar.map((c,i) => { if (c === 0) { ar[i] = ar[i-1]; }; return ar[i]; }).slice(1));
+// }
 
 
 // input: array of [omr20, pris]
@@ -62,11 +62,15 @@ function preprocess(ar) {
     
     let data = _.groupBy(ar, c => c[0]);  // f.eks. omr20 
     
+    // keys: locations
+    
     let keys = Object.keys(data);
     
     keys.forEach((c) => { 
         
-        data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
+//         data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
+        
+        data[c] = data[c].map((b) => {return [b[1],b[2]]});
         
     });
     
@@ -111,49 +115,80 @@ function updateLocation(omr) {
 
 
 
-// Multiple omr20 selections
+// NOTE: (1) New single omr20 selections only; (2) requires dates are sorted beforehand (which they are with sqlite3 when generating the raw .csv data files)
 
-// select: []
+// select == omraade
 
 function makeData(obj, select) {
+
+    if (graphdata.length > 0) {
+        
+        return makeDataX(obj, select);
+        
+    } else {
+        
+        select.forEach((c,i) => { makeDataX(obj, select.slice(0, i+1)); });
+        
+        return graphdata;
+    }
+}    
     
-    let ar = [], diff = [];
+function makeDataX(obj, select) {
+    
+    let ar = [], diff_dates = [], json = {}, js = {}, k = "";
     
     if (graphdata.length > 0) {
         
-        diff = _.difference(select, Object.keys(graphdata[0]));
+        ar = storage[obj.id][select[select.length-1]];
         
-        if (diff.length > 0) {
+        diff_dates = _.difference(ar.map(c => c[0]), dates);
+
+        k = "v" + (select.length - 1);
+        
+        graphdata.map((c,i) => { js={}; js[k] = Number(ar[i][1]); return Object.assign(c, js); }); 
+        
+        if (diff_dates.length > 0) {
             
-            graphdata = graphdata.map((c,i) => { 
+            json = _.groupBy(ar, c => c[0]);
+            
+            ar = diff_dates.map(t => json[t][0]);  // [[t0,v0],[t1,v1]...]
+            
+            ar.forEach((c) => {
                 
-                let js = {};
+                js = {};
+                js.t = c[0];
+                js[k] = Number(c[1]);
                 
-                // j: omr20 index in select
-                diff.forEach((d,j) => {  js[d] = storage[obj.id][diff[j]][i]; });
-                
-                return Object.assign(c, js);
+                graphdata.push(js);
             });
-        }    
-        
-        return graphdata;
+        } 
         
     } else {
-    
-        graphdata = storage[obj.id][select[0]].map((c,i) => { 
         
-            let js = {};
+        select.forEach((d,i) => {
             
-            js.t = new Date(2004, i, 28);
+            k = "v"+i;
+                        
+            storage[obj.id][d].forEach((c) => { 
+                
+                js = {};
+                js.t = c[0];
+                js[k] = Number(c[1]);
             
-            // j: omr20 index in select
-            select.forEach((d,j) => { js[d] = storage[obj.id][select[j]][i]; });
-            
-            return js;
+                ar.push(js);
+            });
         });
         
-        return graphdata;
+        json = _.groupBy(ar, c => c.t);
+        
+        dates = Object.keys(json);
+        
+        graphdata = dates.map(c => json[c][0]);
     }    
+
+        ar = [];
+        
+        return graphdata;     
 }
     
 
@@ -191,16 +226,18 @@ function draw(obj) {
 
 function mgMultiLine(id, data, legend, title) {
     
+    let y_acc = legend.map((c,i) => ("v"+i));
+    
     MG.data_graphic({
         title: title,
-        data: data,
+        data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)});  }),
         width: 966,
         height: 600,
         right: 220,
         target: ('#' + id),
         legend: legend,
         x_accessor: 't',
-        y_accessor: legend
+        y_accessor: y_acc
 
     });  
 }
@@ -240,40 +277,87 @@ function statistics(m, type) {
     setOptionValue("boligtype", type);
 
     let obj = {};
+    
+    let title="", y_legend="", filnavn="", id="", 
+        bm = true;
         
-    // title
-    
-    let title = "", y_legend = "";
-
-    title = (m === "qpris") ? "handelspris" : m ;
-    
-    title = title.charAt(0).toUpperCase() + title.slice(1);
+    // ...
+        
+    bm = (["salg","salgstid","pris"].includes(m)) ? true : false ;    
     
     // ...
     
-    if (["qpris", "udbudspris", "nedtagningspris"].includes(m)) {
+    if (["pris", "udbud-pris", "nedtagne-pris"].includes(m)) {
         
-        y_legend = ", DKK pr. m2 (price/m2)";
+        y_legend = "DKK pr. m2 (price/m2)";
+                        
+        if (bm) {
+        
+            id = type + "-realiseret-" + m; 
+            
+            filnavn = id + ".csv";
+            
+            title = "Handelspris, DKK pr. m2 (traded price/m2)";
+            
+        } else {
+
+            id = type + "-annonce-" + m; 
+
+            filnavn = id + ".csv";
+            
+            title = "Internet " + ((m === "udbud-pris") ? "udbudspris" : "nedtagningspris") + ", DKK pr. m2 (price/m2)";
+        }
+        
+        
+        obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
+
+    } else if (["salgstid", "udbud-tid", "nedtagne-tid"].includes(m)) {
+
+        y_legend = "antal dage (# days)";
         
         title = title + " " + y_legend;
+        
+        if (bm) {
+        
+            id = type + "-realiseret-salgstid"; 
+            
+            filnavn = id + ".csv";
+            
+            title = "Salgstid i dage (sales time, # days)";
+            
+        } else {
+
+            id = type + "-annonce-" + m; 
+
+            filnavn = id + ".csv";
+            
+            title = "Internet " + ((m === "udbud-tid") ? "udbudstid" : "annoncetid ved nedtagning")  + " i dage (# days advertised)";
+        }        
+        
+        obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
+
+    } else if (["salg", "udbud", "nedtagne"].includes(m)) {
+
+        y_legend = "antal boliger (# homes)";
                 
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
-
-    } else if (["udbudstid", "liggetid"].includes(m)) {
-
-        y_legend = ", antal dage (# days)";
+        if (bm) {
         
-        title = title + " " + y_legend;
-        
-        obj = {"id": m + "_" + type + "_kommune", "file": m + "-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
+            id = type + "-realiseret-" + m; 
+            
+            filnavn = id + ".csv";
+            
+            title = "Antal solgte (# traded homes)";
+            
+        } else {
 
-    } else if (["udbud", "nedtagne"].includes(m)) {
+            id = type + "-annonce-" + m; 
 
-        y_legend = ", antal boliger (# homes)";
+            filnavn = id + ".csv";
+            
+            title = "Internet, antal " + m + " (# homes)";
+        }
         
-        title = title + " " + y_legend;
-        
-        obj = {"id": m + "_antal_" + type + "_kommune", "file": m + "-antal-" + type + "-kommune.csv", "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
+        obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
     } 
 
     dataDraw(obj);
