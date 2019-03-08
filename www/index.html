@@ -65,19 +65,19 @@
                 <label for="metric">Bolig statistik (home statistics) &nbsp;</label>
                 </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
                 <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
-                  <optgroup label="internet annonceret (advertised)">
+                  <optgroup label="Annonceret (advertised, monthly)">
                     <option value="udbud-pris">Udbudspris i DKK pr. m2 (price/m2)</option>
                     <option value="udbud-tid">Annoncetid i dage (days advertised)</option>
-                    <option value="udbud">Boliger til salg (# homes for sale)</option>
+                    <option value="udbud">Boliger til salg i måneden (# homes for sale)</option>
                  </optgroup>
-                 <optgroup label="annoncestop (no longer advertised)">
+                 <optgroup label="Annonce-stop (no longer advertised, monthly)">
                     <option value="nedtagne-pris">Nedtagningspris i DKK pr. m2 (price/m2 at removal time)</option>
                     <option value="nedtagne-tid">Annnoncetid i dage (days advertised)</option>
-                    <option value="nedtagne">Antal boliger (# homes)</option>
+                    <option value="nedtagne">Antal nedtagne boliger i måneden (# homes)</option>
                  </optgroup>
-                  <optgroup label="faktiske handler (actual trades)">
+                  <optgroup label="Faktiske handler (actual trades, quarterly)">
                     <option value="pris">Handelspris i DKK pr. m2 (trading price/m2)</option>
-                    <option value="salg">Antal solgte (# of trades)</option>
+                    <option value="salg">Antal solgte i kvartalet (# of trades)</option>
                     <option value="salgstid">Salgstid i dage (sales time in days)</option>
                  </optgroup>
                 </select>
@@ -134,6 +134,7 @@
         
         <br>
         <p>Grafikken kan tage nogle sekunder om at opdatere (the diagram may take a few seconds to update).</p>
+        <span id="diagram-message" class="alert"></span>
         <hr><br>
     
         <svg viewbox="0 0 975 600" id="mg-multiline"></svg>

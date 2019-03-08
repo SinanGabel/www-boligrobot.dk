@@ -30,6 +30,32 @@ function setOptionValue(id, val) {
 
 // ...
 
+/* 
+ . note: remember to declare id's globally, and to call clearTimeout() each time message is called
+ . ...
+*/ 
+function message(id, txt, t) {
+    
+    t = t || 10000;
+
+    let h = document.getElementById(id);
+    
+    // set message text 
+    h.textContent += "Alert: " + txt + " ";
+    h.style.display = "block";
+    
+    // remove text after time t
+    setTimeout( function() { 
+        
+        h.textContent = "";
+        h.style.display = "none";
+        
+    }, t);  // note the need to wrap in a function()
+}
+
+
+// ...
+
 function filter(obj, csv) {
     
     const d = obj.delimiter;
@@ -115,7 +141,7 @@ function updateLocation(omr) {
 
 
 
-// NOTE: (1) New single omr20 selections only; (2) requires dates are sorted beforehand (which they are with sqlite3 when generating the raw .csv data files)
+// NOTE: (1) multi omraade select ok (handled with multiple calls to makeDataX()); (2) unordered dates ok (handled via diff_dates and dates)
 
 // select == omraade
 
@@ -123,19 +149,28 @@ function makeData(obj, select) {
 
     if (graphdata.length > 0) {
         
-        return makeDataX(obj, select);
+        makeDataX(obj, select);
         
     } else {
         
         select.forEach((c,i) => { makeDataX(obj, select.slice(0, i+1)); });
-        
-        return graphdata;
     }
+    
+    return graphdata;
 }    
     
 function makeDataX(obj, select) {
     
     let ar = [], diff_dates = [], json = {}, js = {}, k = "";
+    
+    if (! storage[obj.id].hasOwnProperty(select[select.length-1]) || _.isEmpty(storage[obj.id][select[select.length-1]])) { 
+        
+        console.log("No data for: ", select[select.length-1]); 
+        
+        message("diagram-message", ("No data for " + select[select.length-1] + ": " + obj.id + "."), 60000);
+        
+        return; 
+    }
     
     if (graphdata.length > 0) {
         
@@ -145,7 +180,19 @@ function makeDataX(obj, select) {
 
         k = "v" + (select.length - 1);
         
-        graphdata.map((c,i) => { js={}; js[k] = Number(ar[i][1]); return Object.assign(c, js); }); 
+        graphdata.map((c,i) => { 
+            
+            if (ar[i]) {
+            
+                js={}; 
+                js[k] = Number(ar[i][1]); 
+                return Object.assign(c, js); 
+            
+            } else {
+                
+                return c;
+            }
+        }); 
         
         if (diff_dates.length > 0) {
             
@@ -186,9 +233,9 @@ function makeDataX(obj, select) {
         graphdata = dates.map(c => json[c][0]);
     }    
 
-        ar = [];
+    ar = [];
         
-        return graphdata;     
+//  return graphdata;     
 }
     
 
@@ -346,7 +393,7 @@ function statistics(m, type) {
             
             filnavn = id + ".csv";
             
-            title = "Antal solgte (# traded homes)";
+            title = "Antal solgte pr. kvartal (# traded homes quarterly)";
             
         } else {
 
@@ -354,7 +401,7 @@ function statistics(m, type) {
 
             filnavn = id + ".csv";
             
-            title = "Internet, antal " + m + " (# homes)";
+            title = "Internet, antal " + m + " pr. måned (# homes monthly)";
         }
         
         obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};

@@ -310,6 +310,10 @@ a:hover {
   color: #ff5722;
 }
 
+.alert {
+    color: red;
+}
+
 
 /*
  * -- TABLET (AND UP) MEDIA QUERIES --
