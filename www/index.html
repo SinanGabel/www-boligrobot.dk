@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name=author content="Sinan Gabel">
-    <meta name=copyright content="boligrobot.dk is a service brand of RiskButler.com. Copyright 2019 RiskButler.com. All rights reserved.">
+    <meta name=copyright content="Copyright 2019 Sinan Gabel. All rights reserved.">
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=default>
 
@@ -29,7 +29,7 @@
 
         <ul class="pure-menu-list">
 <!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
-            <li class="pure-menu-item"><a href="mailto:info@riskbutler.com?subject=boligrobot.dk" class="pure-menu-link">info@riskbutler.com</a></li>
+            <li class="pure-menu-item"><a href="mailto:info@ifs.dk?subject=boligrobot.dk" class="pure-menu-link">email</a></li>
         </ul>
     </div>
 </div>
@@ -47,17 +47,9 @@
                 <label for="boligtype">Boligtype (home type) &nbsp;</label>
                 </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3 pure-u-xl-3-4">
                 <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
-                  <optgroup label="enkelt (single)">
                     <option value="lejlighed">Lejlighed (apartment)</option>
                     <option value="hus">Hus (house)</option>
                     <option value="fritidshus">Sommerhus (summerhouse)</option>
-                 </optgroup>
-                 <optgroup label="flere (more)">
-                    <option value="all" disabled>Alle (all)</option>
-                    <option value="lejhus" disabled>Lejlighed og hus (apartment and house)</option>
-                    <option value="lejfritidshus" disabled>Lejlighed og sommerhus (apartment and summerhouse)</option>
-                    <option value="husfritidshus" disabled>Hus og fritidshus (house and summerhouse)</option>
-                 </optgroup>
                 </select>
                 </div>
                 
@@ -88,8 +80,8 @@
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3  pure-u-xl-1-4">
                 <label for="location">Område (location) &nbsp;</label>
                 </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
-                <select id="location" onchange="setAction();updateLocation(this.value);">
-                <option value="vaelg">Vælg område (select location)</option>
+                <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
+                <option value="vaelg">Vælg område/postnummer (select location/zip code)</option>
                 <option value="Hele landet">Hele landet</option><option value="Region Hovedstaden">Region Hovedstaden</option><option value="Region Midtjylland">Region Midtjylland</option><option value="Region Syddanmark">Region Syddanmark</option><option value="Region Nordjylland">Region Nordjylland</option><option value="Region Sjælland">Region Sjælland</option>
                 <optgroup label="Landsdel København by">
                     <option value="Landsdel København by">Landsdel København by</option><option value="København">København</option><option value="Frederiksberg">Frederiksberg</option><option value="Dragør">Dragør</option><option value="Tårnby">Tårnby</option>
@@ -125,19 +117,25 @@
                 <optgroup label="Landsdel Bornholm">
                     <option value="Landsdel Bornholm">Landsdel Bornholm</option><option value="Bornholm">Bornholm</option><option value="Christiansø" disabled>Christiansø (no data)</option>
                 </optgroup>
+                <optgroup id="zip" label="Postnummer (zip code, actual trades only)">
+                </optgroup>
                 </select>
-                <button type="button" class="pure-button" onclick="updateLocation('reset');">reset</button>
+                <button id="reset" type="button" class="pure-button reset" onclick="updateLocation('reset');this.className='pure-button';">Reset</button>
                 </div>
                 
             </fieldset>
         </form>            
         
         <br>
-        <p>Grafikken kan tage nogle sekunder om at opdatere (the diagram may take a few seconds to update).</p>
+        <p id="info-1">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
+        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button><br><br>
+        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
+        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button>
+        </p>
         <span id="diagram-message" class="alert"></span>
         <hr><br>
     
-        <svg viewbox="0 0 975 600" id="mg-multiline"></svg>
+        <svg viewbox="0 0 966 400" id="mg-multiline"></svg>
     </div>
     
         
@@ -179,7 +177,7 @@
     <br><br><br><br>
 
     <div class="footer l-box is-center">
-        Copyright 2019 RiskButler.com &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
+        Copyright 2019 Sinan Gabel. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
     </div>
 
 </div>

@@ -3,12 +3,28 @@
 
 // name: Aarhus (geo), value: Århus (udb, bm)
 
-const locations = ["Hele landet", "Region Hovedstaden", "Region Nordjylland", "Region Midtjylland", "Region Syddanmark", "Region Sjælland", "Landsdel København by", "København", "Frederiksberg", "Dragør", "Tårnby", "Landsdel Københavns omegn", "Albertslund", "Ballerup", "Brøndby", "Gentofte", "Gladsaxe", "Glostrup", "Herlev", "Hvidovre", "Høje-Taastrup", "Ishøj", "Lyngby-Taarbæk", "Rødovre", "Vallensbæk", "Landsdel Nordsjælland", "Allerød", "Egedal", "Fredensborg", "Frederikssund", "Furesø", "Gribskov", "Halsnæs", "Helsingør", "Hillerød", "Hørsholm", "Rudersdal", "Landsdel Bornholm", "Bornholm", "Christiansø", "Landsdel Østsjælland", "Greve", "Køge", "Lejre", "Roskilde", "Solrød", "Landsdel Vest- og Sydsjælland", "Faxe", "Guldborgsund", "Holbæk", "Kalundborg", "Lolland", "Næstved", "Odsherred", "Ringsted", "Slagelse", "Sorø", "Stevns", "Vordingborg", "Landsdel Fyn", "Assens", "Faaborg-Midtfyn", "Kerteminde", "Langeland", "Middelfart", "Nordfyns", "Nyborg", "Odense", "Svendborg", "Ærø", "Landsdel Sydjylland", "Billund", "Esbjerg", "Fanø", "Fredericia", "Haderslev", "Kolding", "Sønderborg", "Tønder", "Varde", "Vejen", "Vejle", "Aabenraa", "Landsdel Østjylland", "Favrskov", "Hedensted", "Horsens", "Norddjurs", "Odder", "Randers", "Samsø", "Silkeborg", "Skanderborg", "Syddjurs", "Århus", "Landsdel Vestjylland", "Herning", "Holstebro", "Ikast-Brande", "Lemvig", "Ringkøbing-Skjern", "Skive", "Struer", "Viborg", "Landsdel Nordjylland", "Brønderslev", "Frederikshavn", "Hjørring", "Jammerbugt", "Læsø", "Mariagerfjord", "Morsø", "Rebild", "Thisted", "Vesthimmerlands", "Aalborg"];
+var storage={}, dates={}, omraade=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
 
-var storage = {}, dates = {}, omraade = [], graphdata = [];
+const regex = /[0-9]/g;
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
 
+
+// ...
+
+function optionElements(id, ar) {
+
+    let root = document.getElementById(id), op;
+
+    ar.forEach((f) => {
+
+        op = document.createElement("option");
+        op.setAttribute("value", f);
+        op.textContent = f;
+        
+        root.appendChild(op);    
+    });            
+}
 
 
 // ...
@@ -56,9 +72,9 @@ function message(id, txt, t) {
 
 // ...
 
-function filter(obj, csv) {
+function csvFilter(delimiter, csv) {
     
-    const d = obj.delimiter;
+    const d = delimiter;
     
     let ar = [];
     
@@ -164,11 +180,13 @@ function makeDataX(obj, select) {
     let ar = [], diff_dates = [], json = {}, js = {}, k = "";
     
     if (! storage[obj.id].hasOwnProperty(select[select.length-1]) || _.isEmpty(storage[obj.id][select[select.length-1]])) { 
-        
+                
+        message("diagram-message", ("No data for " + select[select.length-1] + ": " + obj.id + "."), 60000);
+
         console.log("No data for: ", select[select.length-1]); 
         
-        message("diagram-message", ("No data for " + select[select.length-1] + ": " + obj.id + "."), 60000);
-        
+        omraade.pop();  // remove last element
+
         return; 
     }
     
@@ -262,10 +280,23 @@ function draw(obj) {
         
         if (omraade.length === 0) { omraade = ["Hele landet"]; }
         
-        mgMultiLine("mg-multiline", makeData(obj, omraade), omraade, obj.title);
+        makeData(obj, omraade);
+        
+        if (graphdata.length > 0) {
+        
+            mgMultiLine("mg-multiline", graphdata, omraade, obj.title);
+            
+            _.delay(clearAction, 500);
+            
+        } else {
+            
+            omraade = [];
+            
+            clearAction();
+        }    
     }
     
-    _.delay(clearAction, 500);
+    
 }
 
 
@@ -275,16 +306,25 @@ function mgMultiLine(id, data, legend, title) {
     
     let y_acc = legend.map((c,i) => ("v"+i));
     
+    let margin = 120;
+    
+//     let lt = _.maxBy(data, 't');
+//     
+//     let mark = [{"date": new Date(lt.t), "label": lt.t}];
+        
     MG.data_graphic({
         title: title,
-        data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)});  }),
+        data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)}); }),
+        left: margin,
         width: 966,
-        height: 600,
-        right: 220,
+        height: 400,
+        right: (margin + 100),
         target: ('#' + id),
         legend: legend,
         x_accessor: 't',
+        x_extended_ticks: true,
         y_accessor: y_acc
+//         markers: mark
 
     });  
 }
@@ -302,12 +342,11 @@ function dataDraw(obj) {
 
         $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
                         
-            r = filter(obj, r);
+            r = csvFilter(obj.delimiter, r);
             
             storage[obj.id] = preprocess(r);
                         
             draw(obj);
-            
         });
     }
 }  
@@ -330,7 +369,18 @@ function statistics(m, type) {
         
     // ...
         
-    bm = (["salg","salgstid","pris"].includes(m)) ? true : false ;    
+    bm = (["salg","salgstid","pris"].includes(m)) ? true : false ; 
+    
+    // ...
+    
+    if (bm) { 
+        
+        optionElements("zip", postnumre);
+        
+    } else {
+     
+        document.getElementById("zip").textContent = "";
+    }
     
     // ...
     
@@ -595,9 +645,28 @@ function multiLine(id, data) {
 }
 
 
+// ...
+
+function init() {
+    
+    // opdate locations
+    
+    $.ajax({"method": "GET", "url": host + "omraader-bm.csv", "dataType": "text", "cache": true}).then((r) => {
+                    
+        locations = r.split("\n").filter(c => c !== "");
+        
+        postnumre = locations.filter(c => (c).match(regex));
+        
+        kommuner = _.difference(locations, postnumre);
+        
+        optionElements("zip", postnumre);
+    });
+}
 
 
+// run once
 
+init();
 
 
 
