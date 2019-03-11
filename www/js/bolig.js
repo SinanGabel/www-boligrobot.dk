@@ -9,7 +9,7 @@ const regex = /[0-9]/g;
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
 
-var init_viewBox = true;
+// var init_viewBox = true;
 
 
 // ...
@@ -308,21 +308,24 @@ function mgMultiLine(id, data, legend, title) {
     
     // run once
     
-    if (init_viewBox) {
-        
-        init_viewBox = false;
-       
-        let root = document.getElementById("init_svg");
-        
-        root.appendChild(document.createElement("hr"));
-        root.appendChild(document.createElement("br"));
-        
-        let svg = document.createElement("svg");
-        svg.setAttribute("viewBox","0 0 966 400");
-        svg.setAttribute("id", "mg-multiline");
-
-        root.appendChild(svg);
-    }
+//     if (init_viewBox) {
+//         
+//         init_viewBox = false;
+//        
+//         let root = document.getElementById("content-diagram");
+//         
+//         root.appendChild(document.createElement("hr"));
+//         root.appendChild(document.createElement("br"));
+//         
+//         let svg = document.createElement("svg");
+// //         svg.setAttribute("viewBox","0 0 966 400");
+//         svg.setAttribute("id", "mg-multiline");
+// 
+//         svg.setAttributeNS("", "viewBox", "0 0 966 400");
+//         
+//         root.appendChild(svg);
+//         
+//     }
     
     // continue
     
@@ -684,6 +687,13 @@ function init() {
         kommuner = _.difference(locations, postnumre);
         
         optionElements("zip", postnumre);
+        
+        // example diagram
+        
+        omraade = ["Region Hovedstaden", "Region Midtjylland", "Region Syddanmark", "Region Nordjylland", "Region Sjælland"];
+        
+        statistics(null, "lejlighed");
+
         
 //         clearAction();
     });
