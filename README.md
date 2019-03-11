@@ -1,16 +1,5 @@
-Pure CSS Layout Examples
-========================
+## boligrobot.dk
 
-Layout examples using [Pure CSS][pure] compiled from the [pure-site][] project.
+Web site for boligrobot.dk
 
-[pure]: http://purecss.io/
-[pure-site]: https://github.com/pure-css/pure-site
-
-
-License
--------
-
-This software is free to use under the zLib license.
-See the [zLib][] license for more information.
-
-[zLib]: http://www.zlib.net/zlib_license.html
+Providing home prices (currently Danish houses, apartments, summer houses)  down to zip code level and soon AI home price predictions.
