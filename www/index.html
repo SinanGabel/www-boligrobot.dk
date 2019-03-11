@@ -126,22 +126,16 @@
             </fieldset>
         </form>            
         
-        <br>
-        <p id="info-1">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
-        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button><br><br>
-        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
-        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button>
-        </p>
-        <span id="diagram-message" class="alert"></span>
-        <hr><br>
+        <br><span id="diagram-message" class="alert"></span>
+        
+        <span id="init_svg"></span>
     
-        <svg viewbox="0 0 966 400" id="mg-multiline"></svg>
+<!--         <span id="init_svg"><hr><br><svg viewBox="0 0 0 0" id="mg-multiline"></svg></span> -->
     </div>
     
         
     <div class="content">
     <hr>
-
         <div class="pure-g">
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
 
@@ -163,7 +157,7 @@
                 <h3 class="content-subhead">
                     <i class="fas fa-tachometer-alt"></i>Præcision
                 </h3>
-                <p>Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal. Prognoserne er dog muligvis de mest præcise som findes.<br><br>Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers. Though the predictions may be the most accurate available.</p>
+                <p>Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal.<br><br>Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers.</p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
@@ -172,6 +166,13 @@
                 <p>Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret. Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).<br><br>You should pay particular attention to the differences between actually traded prices and prices advertised. Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas)</p>
             </div>
         </div>
+        
+        <p id="info-1">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
+        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button><br><br>
+        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
+        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button>
+        </p>
+
     </div>
         
     <br><br><br><br>

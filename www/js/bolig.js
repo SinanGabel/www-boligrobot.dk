@@ -9,6 +9,8 @@ const regex = /[0-9]/g;
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
 
+var init_viewBox = true;
+
 
 // ...
 
@@ -303,6 +305,26 @@ function draw(obj) {
 // ...
 
 function mgMultiLine(id, data, legend, title) {
+    
+    // run once
+    
+    if (init_viewBox) {
+        
+        init_viewBox = false;
+       
+        let root = document.getElementById("init_svg");
+        
+        root.appendChild(document.createElement("hr"));
+        root.appendChild(document.createElement("br"));
+        
+        let svg = document.createElement("svg");
+        svg.setAttribute("viewBox","0 0 966 400");
+        svg.setAttribute("id", "mg-multiline");
+
+        root.appendChild(svg);
+    }
+    
+    // continue
     
     let y_acc = legend.map((c,i) => ("v"+i));
     
@@ -651,6 +673,8 @@ function init() {
     
     // opdate locations
     
+    //setAction();
+    
     $.ajax({"method": "GET", "url": host + "omraader-bm.csv", "dataType": "text", "cache": true}).then((r) => {
                     
         locations = r.split("\n").filter(c => c !== "");
@@ -660,6 +684,8 @@ function init() {
         kommuner = _.difference(locations, postnumre);
         
         optionElements("zip", postnumre);
+        
+//         clearAction();
     });
 }
 
