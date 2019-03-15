@@ -85,6 +85,10 @@ a:hover {
     font-size: 100%;
 }
 
+.pure-form label.radio {
+    float:left;
+}
+
 .pure-form input[type] {
     border: 2px solid #ddd;
     box-shadow: none;
@@ -92,6 +96,11 @@ a:hover {
     width: 100%;
     margin-bottom: 1em;
 }
+
+.pure-form input.radio {
+    float:left;
+}
+
 
 /*
  * -- PURE BUTTON STYLES --
@@ -105,7 +114,7 @@ a:hover {
 }
 
 .pure-button.reset {
-    background-color: #8695e8; /* this is a light violet */
+    background-color: #03a9f4; /* this is a light violet */
     color: white;
     font-size: 80%;
 }
@@ -114,6 +123,10 @@ a:hover {
     background-color: #9c27b0; /* this is a reddish light violet */
     color: white;
     font-size: 70%;
+}
+
+.pure-button.active {
+    background-color: #2196f3; /* this is a blue */
 }
 
 /*a.pure-button-primary {
@@ -324,6 +337,15 @@ a:hover {
 
 .alert {
     color: red;
+}
+
+
+.lang-block {
+    display: block;
+}
+
+.lang-none {
+    display: none;
 }
 
 

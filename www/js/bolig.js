@@ -12,6 +12,35 @@ const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419
 // var init_viewBox = true;
 
 
+// Shows a modal dialog while fetching data
+
+function setAction(hideBackground) {
+    
+    let sd = document.getElementById("action").style;
+
+    sd.display = "block";
+
+    if (hideBackground) {
+        sd.opacity = "100";
+    } else {
+        sd.opacity = ".85";
+    }  
+
+    let el = document.createElement("i");
+        el.setAttribute("class", "fas fa-spinner fa-pulse fa-2x");
+    document.getElementById("msg").appendChild(el);
+}
+
+
+// Clears the modal dialog
+
+function clearAction() {
+    
+    document.getElementById("msg").textContent = "";
+    document.getElementById("action").style.display = "none";
+}
+
+
 // ...
 
 function optionElements(id, ar) {
@@ -69,6 +98,36 @@ function message(id, txt, t) {
         h.style.display = "none";
         
     }, t);  // note the need to wrap in a function()
+}
+
+
+// toggleLanguage("dk", "en") or toggleLanguage("en", "dk")
+
+function toggleLanguage(fra, til) {
+    
+    let block = document.getElementsByName(fra);
+    let none = document.getElementsByName(til);
+    
+
+    block.forEach(c => {c.className = "lang-none";});
+    none.forEach(c => {c.className = "lang-block";});
+
+}
+
+function changeLanguage(l) {
+    
+    let dk = (l.textContent === "Dansk");
+    
+    l.textContent = (dk) ? "English" : "Dansk" ;
+    
+    if (dk) {
+        
+        toggleLanguage("en", "dk");
+        
+    } else {
+        
+        toggleLanguage("dk", "en");
+    }
 }
 
 
@@ -153,8 +212,16 @@ function updateLocation(omr) {
             setOptionValue("location", "vaelg");
         }
     }
+    
+    // ...
+    
+    let className = [document.getElementById("button-lejlighed").className, document.getElementById("button-hus").className, document.getElementById("button-fritidshus").className];
+    
+    let type = ["lejlighed", "hus", "fritidshus"];
+    
+    // ...
         
-    statistics();
+    statistics(null, type[ className.indexOf("pure-button active") ]);
 }
 
 
@@ -377,16 +444,10 @@ function dataDraw(obj) {
 }  
 
 
-// ...
+// ..
 
-function statistics(m, type) {
+function makeHistoryRequestObject(m, type) {
     
-    m = m || document.getElementById("metric").value;
-    type = type || document.getElementById("boligtype").value;
-    
-    setOptionValue("metric", m);
-    setOptionValue("boligtype", type);
-
     let obj = {};
     
     let title="", y_legend="", filnavn="", id="", 
@@ -482,36 +543,50 @@ function statistics(m, type) {
         obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
     } 
 
+    return obj;
+}
+
+
+
+
+
+
+// TODO when clicking AI or History => update: id="metric"
+
+function statistics(m, type) {
+    
+    m = m || document.getElementById("metric").value;
+    type = type || "lejlighed";
+        
+    setOptionValue("metric", m);
+    
+    let obj = {};
+    
+    // button colors
+    
+    if (type === "lejlighed") {
+        
+        document.getElementById("button-hus").className = "pure-button";
+        document.getElementById("button-fritidshus").className = "pure-button";
+        
+    } else if (type === "hus") {
+        
+        document.getElementById("button-lejlighed").className = "pure-button";
+        document.getElementById("button-fritidshus").className = "pure-button";
+        
+    } else if (type === "fritidshus") {
+        
+        document.getElementById("button-lejlighed").className = "pure-button";
+        document.getElementById("button-hus").className = "pure-button";        
+    }   
+    
+    // ...
+        
+//         obj = makeAIRequestObject(m, type);
+    
+    obj = makeHistoryRequestObject(m, type);
+
     dataDraw(obj);
-}
-
-
-// Shows a modal dialog while fetching data
-
-function setAction(hideBackground) {
-    
-    let sd = document.getElementById("action").style;
-
-    sd.display = "block";
-
-    if (hideBackground) {
-        sd.opacity = "100";
-    } else {
-        sd.opacity = ".85";
-    }  
-
-    let el = document.createElement("i");
-        el.setAttribute("class", "fas fa-spinner fa-pulse fa-2x");
-    document.getElementById("msg").appendChild(el);
-}
-
-
-// Clears the modal dialog
-
-function clearAction() {
-    
-    document.getElementById("msg").textContent = "";
-    document.getElementById("action").style.display = "none";
 }
 
 
