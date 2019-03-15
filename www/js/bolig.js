@@ -215,13 +215,13 @@ function updateLocation(omr) {
     
     // ...
     
-    let className = [document.getElementById("button-lejlighed").className, document.getElementById("button-hus").className, document.getElementById("button-fritidshus").className];
+    let className = [(document.getElementById("button-lejlighed").className).includes("active"), (document.getElementById("button-hus").className).includes("active"), (document.getElementById("button-fritidshus").className).includes("active")];
     
     let type = ["lejlighed", "hus", "fritidshus"];
     
     // ...
         
-    statistics(null, type[ className.indexOf("pure-button active") ]);
+    statistics(null, type[ className.indexOf(true) ]);
 }
 
 
@@ -444,18 +444,23 @@ function dataDraw(obj) {
 }  
 
 
-// ..
+// ...
 
-function makeHistoryRequestObject(m, type) {
+function makeRequestObject(m, type) {
     
     let obj = {};
     
     let title="", y_legend="", filnavn="", id="", 
-        bm = true;
+        bm = true, ai = true;
         
     // ...
         
     bm = (["salg","salgstid","pris"].includes(m)) ? true : false ; 
+    
+    // Forecasts or Historic information
+    
+    ai = (document.getElementById("data-forecast").className).includes("active");
+
     
     // ...
     
@@ -579,12 +584,10 @@ function statistics(m, type) {
         document.getElementById("button-lejlighed").className = "pure-button";
         document.getElementById("button-hus").className = "pure-button";        
     }   
-    
-    // ...
         
-//         obj = makeAIRequestObject(m, type);
-    
-    obj = makeHistoryRequestObject(m, type);
+    // ...
+            
+    obj = makeRequestObject(m, type);
 
     dataDraw(obj);
 }

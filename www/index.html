@@ -64,21 +64,19 @@
                 </div>
             -->
             
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3 pure-u-xl-1-4">
-               <label for="boligtype"><span lang="dk" name="dk" class="lang-block">Boligtype</span><span lang="en" name="en" class="lang-none">Home type</span></label>
+                <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
+                    <label for="boligtype"><span lang="dk" name="dk" class="lang-block">Boligtype</span><span lang="en" name="en" class="lang-none">Home type</span></label>
                 </div>
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3 pure-u-xl-3-4">
-                    
+                <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                     <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="lang-block">Lejlighed</span><span lang="en" name="en" class="lang-none">Apartment</span></button>
                     <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="dk" name="dk" class="lang-block">Hus</span><span lang="en" name="en" class="lang-none">House</span></button>
-                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="lang-block">Fritidshus</span><span lang="en" name="en" class="lang-none">Summer house</span></button>
-                
+                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="lang-block">Fritidshus</span><span lang="en" name="en" class="lang-none">Summer house</span></button>                
                 </div>
                 
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3  pure-u-xl-1-4">
+                <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
                 <label for="metric"><span lang="dk" name="dk" class="lang-block">Bolig statistik</span><span lang="en" name="en" class="lang-none">Home statistics</span></label>
-                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
+                </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                 <span lang="dk" name="dk" class="lang-block">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
@@ -124,9 +122,9 @@
                 
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3  pure-u-xl-1-4">
+                <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 <label for="location"><span lang="dk" name="dk" class="lang-block">Område</span><span lang="en" name="en" class="lang-none">Location</span></label>
-                </div><div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3  pure-u-xl-3-4">
+                </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>
                 <option value="Hele landet">Hele landet</option><option value="Region Hovedstaden">Region Hovedstaden</option><option value="Region Midtjylland">Region Midtjylland</option><option value="Region Syddanmark">Region Syddanmark</option><option value="Region Nordjylland">Region Nordjylland</option><option value="Region Sjælland">Region Sjælland</option>
@@ -167,7 +165,7 @@
                 <optgroup id="zip" label="Postnummer (zip code)">
                 </optgroup>
                 </select>
-                <button id="reset" type="button" class="pure-button reset" onclick="updateLocation('reset');this.className='pure-button';">Reset</button>
+                <button id="reset" type="button" class="pure-button reset" onclick="updateLocation('reset');this.className='pure-button reset-active';">Reset</button>
                 </div>
                 
             </fieldset>
@@ -177,7 +175,11 @@
         
         <hr>
         <svg viewBox="0 0 966 400" id="mg-multiline"></svg>
-            
+        
+        <div class="is-center">
+            <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="lang-none">Historisk data</span><span lang="en" name="en" class="lang-block">Historic data</span></button>
+            <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="lang-none">Prognoser - på vej!</span><span lang="en" name="en" class="lang-block">Predictions - coming!</span></button> 
+        </div>
     </div>
     
         
@@ -191,7 +193,7 @@
                     boligrobot.dk
                 </h3>
                 <p><span lang="dk" name="dk" class="lang-block">
-                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="lang-none">Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and country (summer) houses. Technical requirement is an updated internet browser.</span> 
+                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="lang-none">Boligrobot.dk is a new site where you can soon get predictions on Danish houses, apartments and country (summer) houses. Technical requirement is an updated internet browser.</span> 
                 </p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
