@@ -68,14 +68,29 @@
                     <label for="boligtype"><span lang="dk" name="dk" class="lang-block">Boligtype</span><span lang="en" name="en" class="lang-none">Home type</span></label>
                 </div>
                 <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
-                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="lang-block">Lejlighed</span><span lang="en" name="en" class="lang-none">Apartment</span></button>
+                    <span lang="dk" name="dk" class="lang-block">
+                        <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
+                        <option value="lejlighed">Lejlighed</option>
+                        <option value="hus">Hus</option>
+                        <option value="fritidshus">Sommerhus</option>
+                        </select>
+                    </span>
+                    <span lang="en" name="en" class="lang-none">
+                        <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
+                        <option value="lejlighed">Apartment</option>
+                        <option value="hus">House</option>
+                        <option value="fritidshus">Summer house</option>
+                        </select>
+                    </span>
+                
+<!--                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="lang-block">Lejlighed</span><span lang="en" name="en" class="lang-none">Apartment</span></button>
                     <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="dk" name="dk" class="lang-block">Hus</span><span lang="en" name="en" class="lang-none">House</span></button>
-                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="lang-block">Fritidshus</span><span lang="en" name="en" class="lang-none">Summer house</span></button>                
+                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="lang-block">Fritidshus</span><span lang="en" name="en" class="lang-none">Summer house</span></button>                -->
                 </div>
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
-                <label for="metric"><span lang="dk" name="dk" class="lang-block">Bolig statistik</span><span lang="en" name="en" class="lang-none">Home statistics</span></label>
+                <label for="metric"><span lang="dk" name="dk" class="lang-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="lang-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                 <span lang="dk" name="dk" class="lang-block">
@@ -83,17 +98,17 @@
                     <optgroup label="Pris i DKK pr. m2">
                         <option value="udbud-pris">Udbudspris</option>
                         <option value="nedtagne-pris">Nedtagningspris</option>
-                        <option value="pris">Handelspris</option>
+                        <option value="pris">Handelspris*</option>
                     </optgroup>
                     <optgroup label="Salgstid i dage">
                         <option value="udbud-tid">Udbudstid (til salg)</option>
-                        <option value="nedtagne-tid">Liggetid (nedtagne)</option>
-                        <option value="salgstid">Salgstid (afsluttede handler)</option>
+                        <option value="nedtagne-tid">Liggetid (nedtagne, ikke til salg)</option>
+                        <option value="salgstid">Salgstid (afsluttede handler)*</option>
                     </optgroup>
                     <optgroup label="Bolig udbud">
                         <option value="udbud">Udbud i måneden</option>
                         <option value="nedtagne">Nedtagne i måneden</option>
-                        <option value="salg">Solgt i kvartalet</option>
+                        <option value="salg">Solgt i kvartalet*</option>
                     </optgroup>
                     </select>
                 </span>
@@ -103,17 +118,17 @@
                     <optgroup label="Price in DKK/m2">
                         <option value="udbud-pris">Advertised price</option>
                         <option value="nedtagne-pris">Price at removal time</option>
-                        <option value="pris">Actual trading price</option>
+                        <option value="pris">Actual trading price*</option>
                     </optgroup>
                     <optgroup label="Sales time in days">
                         <option value="udbud-tid">Advertisement time (homes for sale)</option>
-                        <option value="nedtagne-tid">Advertisement time (homes removed)</option>
-                        <option value="salgstid">Actual sales time</option>
+                        <option value="nedtagne-tid">Advertisement time (homes removed, not for sale)</option>
+                        <option value="salgstid">Actual sales time*</option>
                     </optgroup>
                     <optgroup label="Supply of homes">
                         <option value="udbud">Supply during month</option>
                         <option value="nedtagne">Removed during month</option>
-                        <option value="salg">Actual sales during quarter</option>
+                        <option value="salg">Actual sales during quarter*</option>
                     </optgroup>
                     </select>
                 </span>
@@ -123,7 +138,7 @@
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                <label for="location"><span lang="dk" name="dk" class="lang-block">Område</span><span lang="en" name="en" class="lang-none">Location</span></label>
+                <label for="location"><span lang="dk" name="dk" class="lang-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="lang-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>
@@ -176,10 +191,10 @@
         <hr>
         <svg viewBox="0 0 966 400" id="mg-multiline"></svg>
         
-        <div class="is-center">
+<!--        <div class="is-center">
             <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="lang-none">Historisk data</span><span lang="en" name="en" class="lang-block">Historic data</span></button>
             <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="lang-none">Prognoser - på vej!</span><span lang="en" name="en" class="lang-block">Predictions - coming!</span></button> 
-        </div>
+        </div>-->
     </div>
     
         
@@ -193,7 +208,7 @@
                     boligrobot.dk
                 </h3>
                 <p><span lang="dk" name="dk" class="lang-block">
-                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="lang-none">Boligrobot.dk is a new site where you can soon get predictions on Danish houses, apartments and country (summer) houses. Technical requirement is an updated internet browser.</span> 
+                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="lang-none">Boligrobot.dk is a new site where you can soon get predictions on Danish houses, apartments and summer houses. Technical requirement is an updated internet browser.</span> 
                 </p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
@@ -216,9 +231,9 @@
             </div>
         </div>
         
-        <p id="info-1"><span lang="dk" name="dk" class="lang-block">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
+        <p id="info-1"><span lang="dk" name="dk" class="lang-block">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="lang-none">
-        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
+        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button></span>
         </p>
 

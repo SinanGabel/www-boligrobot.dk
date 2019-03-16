@@ -213,15 +213,19 @@ function updateLocation(omr) {
         }
     }
     
+    statistics();
+    
     // ...
     
-    let className = [(document.getElementById("button-lejlighed").className).includes("active"), (document.getElementById("button-hus").className).includes("active"), (document.getElementById("button-fritidshus").className).includes("active")];
-    
-    let type = ["lejlighed", "hus", "fritidshus"];
+//     let className = [(document.getElementById("button-lejlighed").className).includes("active"), 
+//                      (document.getElementById("button-hus").className).includes("active"), 
+//                      (document.getElementById("button-fritidshus").className).includes("active")];
+//     
+//     let type = ["lejlighed", "hus", "fritidshus"];
     
     // ...
         
-    statistics(null, type[ className.indexOf(true) ]);
+//     statistics(null, type[ className.indexOf(true) ]);
 }
 
 
@@ -451,7 +455,7 @@ function makeRequestObject(m, type) {
     let obj = {};
     
     let title="", y_legend="", filnavn="", id="", 
-        bm = true, ai = true;
+        bm = true;
         
     // ...
         
@@ -459,7 +463,7 @@ function makeRequestObject(m, type) {
     
     // Forecasts or Historic information
     
-    ai = (document.getElementById("data-forecast").className).includes("active");
+//     ai = (document.getElementById("data-forecast").className).includes("active");
 
     
     // ...
@@ -561,7 +565,7 @@ function makeRequestObject(m, type) {
 function statistics(m, type) {
     
     m = m || document.getElementById("metric").value;
-    type = type || "lejlighed";
+    type = type ||document.getElementById("boligtype").value;
         
     setOptionValue("metric", m);
     
@@ -569,21 +573,21 @@ function statistics(m, type) {
     
     // button colors
     
-    if (type === "lejlighed") {
-        
-        document.getElementById("button-hus").className = "pure-button";
-        document.getElementById("button-fritidshus").className = "pure-button";
-        
-    } else if (type === "hus") {
-        
-        document.getElementById("button-lejlighed").className = "pure-button";
-        document.getElementById("button-fritidshus").className = "pure-button";
-        
-    } else if (type === "fritidshus") {
-        
-        document.getElementById("button-lejlighed").className = "pure-button";
-        document.getElementById("button-hus").className = "pure-button";        
-    }   
+//     if (type === "lejlighed") {
+//         
+//         document.getElementById("button-hus").className = "pure-button";
+//         document.getElementById("button-fritidshus").className = "pure-button";
+//         
+//     } else if (type === "hus") {
+//         
+//         document.getElementById("button-lejlighed").className = "pure-button";
+//         document.getElementById("button-fritidshus").className = "pure-button";
+//         
+//     } else if (type === "fritidshus") {
+//         
+//         document.getElementById("button-lejlighed").className = "pure-button";
+//         document.getElementById("button-hus").className = "pure-button";        
+//     }   
         
     // ...
             
