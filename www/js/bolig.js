@@ -3,11 +3,15 @@
 
 // name: Aarhus (geo), value: Århus (udb, bm)
 
-var storage={}, dates={}, omraade=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
+var storage={}, dates={}, omraade=[], omraade2x=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
+
+var forecasting = true;
 
 const regex = /[0-9]/g;
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
+
+const ahead = "1M-";
 
 // var init_viewBox = true;
 
@@ -131,6 +135,39 @@ function changeLanguage(l) {
 }
 
 
+// plus 1
+
+function datePlus(d) {
+    
+    let dt = d.split("-");
+    
+    if (dt[1] === "01") {
+        
+        dt[1] = "02";
+        dt[2] = "28";
+        
+    } else if (dt[1] === "02") {
+        
+        dt[1] = "03";
+        dt[2] = "30";
+
+    } else if (dt[1] === "12") {
+        
+        dt[0] = Number(dt[0]) + 1;
+        dt[1] = "01";
+        dt[2] = "30";
+        
+    } else {
+        
+        dt[1] = Number(dt[1]) + 1 ;  // e.g. "03" + 1 => 4
+        
+        dt[1] = (dt[1] > 9) ? dt[1] : "0" + dt[1] ;
+    }
+    
+    return dt.join("-");
+}
+
+
 // ...
 
 function csvFilter(delimiter, csv) {
@@ -161,7 +198,7 @@ function csvFilter(delimiter, csv) {
 
 function preprocess(ar) {
 
-    let obj = {};
+    let ex = {};
     
     let data = _.groupBy(ar, c => c[0]);  // f.eks. omr20 
     
@@ -170,14 +207,26 @@ function preprocess(ar) {
     let keys = Object.keys(data);
     
     keys.forEach((c) => { 
-        
-//         data[c] = sameFilter( data[c].map(b => Number(b[1])) ); 
-        
-        data[c] = data[c].map((b) => {return [b[1],b[2]]});
-        
+                
+        if (forecasting) {
+            
+            ex[c] = data[c].map((b) => {return [b[1],b[2]]});
+            ex[ahead + c] = data[c].map((b) => {return [datePlus(b[1]),b[3]]});   // WARNING 1M currently wrong date therefore this datePlus()
+                        
+        } else {
+            
+            data[c] = data[c].map((b) => {return [b[1],b[2]]});
+        }
     });
-    
-    return data;
+        
+    if (forecasting) {
+
+        return ex;
+
+    } else {
+
+        return data;
+    }
 }
 
 
@@ -185,6 +234,12 @@ function preprocess(ar) {
 
 function updateLocation(omr) {
     
+    if (forecasting) { 
+        
+        omraade = []; 
+        graphdata = [];
+    } 
+        
     if (omr === "reset") {
         
         omraade = [];
@@ -196,7 +251,7 @@ function updateLocation(omr) {
         return;
         
     } else if (locations.includes(omr)) {
-        
+                
         omraade.push(omr);
     
     } else {
@@ -234,23 +289,50 @@ function updateLocation(omr) {
 
 // select == omraade
 
+// TODO possibly make var instead
+
+function omraadeX2(omr, t) {
+    
+    return (omr.map(c => (t + c))).concat(omr);
+}
+
+
+// ...
+
 function makeData(obj, select) {
 
     if (graphdata.length > 0) {
         
-        makeDataX(obj, select);
+        if (forecasting) {
+            
+            makeDataX(obj, omraadeX2(select, ahead));
+        
+        } else {
+        
+            makeDataX(obj, select);            
+        }
         
     } else {
         
-        select.forEach((c,i) => { makeDataX(obj, select.slice(0, i+1)); });
+        if (forecasting) {
+        
+            omraadeX2(select, ahead).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
+        
+        } else {
+
+            select.forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });            
+        }    
     }
     
     return graphdata;
-}    
+}   
+
+
+// ...
     
 function makeDataX(obj, select) {
     
-    let ar = [], diff_dates = [], json = {}, js = {}, k = "";
+    let ar = [], diff_dates = [], json = {}, js = {}, k = "", oo = {};
     
     if (! storage[obj.id].hasOwnProperty(select[select.length-1]) || _.isEmpty(storage[obj.id][select[select.length-1]])) { 
                 
@@ -267,16 +349,18 @@ function makeDataX(obj, select) {
         
         ar = storage[obj.id][select[select.length-1]];
         
-        diff_dates = _.difference(ar.map(c => c[0]), dates);
+        oo = _.fromPairs(ar);
+        
+        diff_dates = _.difference(Object.keys(oo), dates);
 
         k = "v" + (select.length - 1);
         
         graphdata.map((c,i) => { 
             
-            if (ar[i]) {
+            if (oo[c.t]) {  // date should fit, else skip, currently wrong
             
                 js={}; 
-                js[k] = Number(ar[i][1]); 
+                js[k] = Number(oo[c.t]); 
                 return Object.assign(c, js); 
             
             } else {
@@ -377,37 +461,8 @@ function draw(obj) {
 
 function mgMultiLine(id, data, legend, title) {
     
-    // run once
-    
-//     if (init_viewBox) {
-//         
-//         init_viewBox = false;
-//        
-//         let root = document.getElementById("content-diagram");
-//         
-//         root.appendChild(document.createElement("hr"));
-//         root.appendChild(document.createElement("br"));
-//         
-//         let svg = document.createElement("svg");
-// //         svg.setAttribute("viewBox","0 0 966 400");
-//         svg.setAttribute("id", "mg-multiline");
-// 
-//         svg.setAttributeNS("", "viewBox", "0 0 966 400");
-//         
-//         root.appendChild(svg);
-//         
-//     }
-    
-    // continue
-    
-    let y_acc = legend.map((c,i) => ("v"+i));
-    
     let margin = 120;
-    
-//     let lt = _.maxBy(data, 't');
-//     
-//     let mark = [{"date": new Date(lt.t), "label": lt.t}];
-        
+            
     MG.data_graphic({
         title: title,
         data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)}); }),
@@ -416,12 +471,11 @@ function mgMultiLine(id, data, legend, title) {
         height: 400,
         right: (margin + 100),
         target: ('#' + id),
-        legend: legend,
+        legend: ((forecasting) ? omraadeX2(legend, ahead) : legend),
         x_accessor: 't',
         x_extended_ticks: true,
-        y_accessor: y_acc
-//         markers: mark
-
+        y_accessor: (_.range(0, 2*legend.length)).map((c,i) => ("v"+i)),
+        min_y_from_data: true
     });  
 }
 
@@ -448,16 +502,16 @@ function dataDraw(obj) {
 }  
 
 
-// ...
+// f: forecasting boolean
 
-function makeRequestObject(m, type) {
+function makeRequestObject(f, m, type) {
     
     let obj = {};
     
     let title="", y_legend="", filnavn="", id="", 
         bm = true;
         
-    // ...
+    // kvartalsdata
         
     bm = (["salg","salgstid","pris"].includes(m)) ? true : false ; 
     
@@ -466,7 +520,7 @@ function makeRequestObject(m, type) {
 //     ai = (document.getElementById("data-forecast").className).includes("active");
 
     
-    // ...
+    // postnumre findes kun for kvartalsdata
     
     if (bm) { 
         
@@ -491,13 +545,21 @@ function makeRequestObject(m, type) {
             
             title = "Handelspris, DKK pr. m2 (traded price/m2)";
             
-        } else {
+        } else if (! f) {
 
             id = type + "-annonce-" + m; 
 
             filnavn = id + ".csv";
             
             title = "Internet " + ((m === "udbud-pris") ? "udbudspris" : "nedtagningspris") + ", DKK pr. m2 (price/m2)";
+            
+        } else if (f && ["udbud-pris", "nedtagne-pris"].includes(m)) {
+
+            id = type + "-prognose-" + m; 
+
+            filnavn = id + ".csv";
+            
+            title = "Prognose " + ((m === "udbud-pris") ? "udbudspris" : "nedtagningspris") + ", DKK pr. m2 (price/m2)";
         }
         
         
@@ -568,6 +630,7 @@ function statistics(m, type) {
     type = type ||document.getElementById("boligtype").value;
         
     setOptionValue("metric", m);
+    setOptionValue("boligtype", type);
     
     let obj = {};
     
@@ -591,7 +654,7 @@ function statistics(m, type) {
         
     // ...
             
-    obj = makeRequestObject(m, type);
+    obj = makeRequestObject(forecasting, m, type);
 
     dataDraw(obj);
 }
@@ -772,9 +835,9 @@ function init() {
         
         // example diagram
         
-        omraade = ["Region Hovedstaden", "Region Midtjylland", "Region Syddanmark", "Region Nordjylland", "Region Sjælland"];
+        omraade = ["Hele landet"];
         
-        statistics(null, "lejlighed");
+        statistics("udbud-pris", "lejlighed");
 
         
 //         clearAction();
