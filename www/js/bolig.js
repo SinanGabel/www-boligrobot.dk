@@ -105,16 +105,16 @@ function message(id, txt, t) {
 }
 
 
-// toggleLanguage("dk", "en") or toggleLanguage("en", "dk")
+// toggleDisplay("dk", "en") or toggleDisplay("en", "dk")
 
-function toggleLanguage(fra, til) {
+function toggleDisplay(fra, til) {
     
     let block = document.getElementsByName(fra);
     let none = document.getElementsByName(til);
     
 
-    block.forEach(c => {c.className = "lang-none";});
-    none.forEach(c => {c.className = "lang-block";});
+    block.forEach(c => {c.className = "display-none";});
+    none.forEach(c => {c.className = "display-block";});
 
 }
 
@@ -126,11 +126,11 @@ function changeLanguage(l) {
     
     if (dk) {
         
-        toggleLanguage("en", "dk");
+        toggleDisplay("en", "dk");
         
     } else {
         
-        toggleLanguage("dk", "en");
+        toggleDisplay("dk", "en");
     }
 }
 
@@ -234,11 +234,11 @@ function preprocess(ar) {
 
 function updateLocation(omr) {
     
-    if (forecasting) { 
-        
-        omraade = []; 
-        graphdata = [];
-    } 
+//     if (forecasting) { 
+//         
+//         omraade = []; 
+//         graphdata = [];
+//     } 
         
     if (omr === "reset") {
         
@@ -461,20 +461,23 @@ function draw(obj) {
 
 function mgMultiLine(id, data, legend, title) {
     
-    let margin = 120;
+    let margin = {"left": 120, "right": 220};
+    let size = {"width": 483, "height": 300};
+    
+    // viewBox = "0 0 (size.width+margin.left+margin.right) 300"
             
     MG.data_graphic({
         title: title,
         data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)}); }),
-        left: margin,
-        width: 966,
-        height: 400,
-        right: (margin + 100),
+        left: margin.left,
+        width: (size.width + margin.left + margin.right),
+        height: size.height,
+        right: margin.right,
         target: ('#' + id),
         legend: ((forecasting) ? omraadeX2(legend, ahead) : legend),
         x_accessor: 't',
         x_extended_ticks: true,
-        y_accessor: (_.range(0, 2*legend.length)).map((c,i) => ("v"+i)),
+        y_accessor: (((forecasting) ? _.range(0, 2*legend.length) : legend)).map((c,i) => ("v"+i)),
         min_y_from_data: true
     });  
 }
@@ -812,6 +815,29 @@ function multiLine(id, data) {
     svg.node();
 
 //     d3.select(window).on('resize', resize);     
+}
+
+
+// ...
+
+function aiReset(c) {
+    
+    if (c === "ai") {
+        
+        document.getElementById("radio-ai").checked = true;
+        
+        forecasting = true;
+        
+        toggleDisplay("history", "ai")
+        
+    } else {
+
+        document.getElementById("radio-history").checked = true;
+        
+        forecasting = false; 
+        
+        toggleDisplay("ai", "history")
+    }
 }
 
 

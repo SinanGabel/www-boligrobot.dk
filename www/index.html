@@ -39,43 +39,43 @@
 <div class="content-wrapper">
     <div id="content-diagram" class="content">
         <h2 class="content-head is-center">
-            <span lang="dk" name="dk" class="lang-block">Kunstig intelligens boligpris prognoser</span>
-            <span lang="en" name="en" class="lang-none">Artificial Intelligence (AI) home price predictions</span>
+            <span lang="dk" name="dk" class="display-block">Kunstig intelligens boligpris prognoser</span>
+            <span lang="en" name="en" class="display-none">Artificial Intelligence (AI) home price predictions</span>
         </h2>    
         <br>
         
         <form class="pure-form pure-g">
             <fieldset>
 
-<!--                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-3 pure-u-xl-1-4">
+                <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                     &nbsp;
                 </div>
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-3 pure-u-xl-3-4">
+                <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-ai" class="radio">AI
-                            <input type="radio" name="ai-select" value="ai" id="radio-ai" class="radio pure-u-23-24 " onclick="" checked></label>
+                            <label for="radio-ai" class="radio"><span lang="dk" name="dk" class="display-block">AI prognoser</span><span lang="en" name="en" class="display-none">AI predictions</span>
+                            <input type="radio" name="ai-select" value="ai" id="radio-ai" class="radio pure-u-23-24 " onclick="aiReset('ai');" checked></label>
                         </div>
             
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-history" class="radio">History
-                            <input type="radio" name="ai-select" value="history" id="radio-history" class="radio pure-u-23-24" onclick=""></label>
+                            <label for="radio-history" class="radio"><span lang="dk" name="dk" class="display-block">Historisk data</span><span lang="en" name="en" class="display-none">Historic data</span>
+                            <input type="radio" name="ai-select" value="history" id="radio-history" class="radio pure-u-23-24" onclick="aiReset('history');"></label>
                         </div>
                 </div>
-            -->
+            
             
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                    <label for="boligtype"><span lang="dk" name="dk" class="lang-block">Boligtype</span><span lang="en" name="en" class="lang-none">Home type</span></label>
+                    <label for="boligtype"><span lang="dk" name="dk" class="display-block">Boligtype</span><span lang="en" name="en" class="display-none">Home type</span></label>
                 </div>
                 <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
-                    <span lang="dk" name="dk" class="lang-block">
+                    <span lang="dk" name="dk" class="display-block">
                         <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
                         <option value="lejlighed">Lejlighed</option>
                         <option value="hus">Hus</option>
                         <option value="fritidshus">Sommerhus</option>
                         </select>
                     </span>
-                    <span lang="en" name="en" class="lang-none">
+                    <span lang="en" name="en" class="display-none">
                         <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
                         <option value="lejlighed">Apartment</option>
                         <option value="hus">House</option>
@@ -83,29 +83,33 @@
                         </select>
                     </span>
                 
-<!--                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="lang-block">Lejlighed</span><span lang="en" name="en" class="lang-none">Apartment</span></button>
-                    <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="dk" name="dk" class="lang-block">Hus</span><span lang="en" name="en" class="lang-none">House</span></button>
-                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="lang-block">Fritidshus</span><span lang="en" name="en" class="lang-none">Summer house</span></button>                -->
+<!--                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="display-block">Lejlighed</span><span lang="en" name="en" class="display-none">Apartment</span></button>
+                    <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="dk" name="dk" class="display-block">Hus</span><span lang="en" name="en" class="display-none">House</span></button>
+                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="display-block">Fritidshus</span><span lang="en" name="en" class="display-none">Summer house</span></button>                -->
                 </div>
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
-                <label for="metric"><span lang="dk" name="dk" class="lang-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="lang-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
+                <label for="metric"><span lang="dk" name="dk" class="display-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="display-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
-                <span lang="dk" name="dk" class="lang-block">
+                <span lang="dk" name="dk" class="display-block">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
-                    <optgroup label="Pris i DKK pr. m2">
+                    <optgroup name="ai" label="Pris i DKK pr. m2" class="display-block">
+                        <option value="udbud-pris">Udbudspris</option>
+                        <option value="nedtagne-pris">Nedtagningspris</option>
+                    </optgroup>
+                    <optgroup name="history" label="Pris i DKK pr. m2" class="display-none">
                         <option value="udbud-pris">Udbudspris</option>
                         <option value="nedtagne-pris">Nedtagningspris</option>
                         <option value="pris">Handelspris*</option>
                     </optgroup>
-                    <optgroup label="Salgstid i dage">
+                    <optgroup name="history" label="Salgstid i dage" class="display-none">
                         <option value="udbud-tid">Udbudstid (til salg)</option>
                         <option value="nedtagne-tid">Liggetid (nedtagne, ikke til salg)</option>
                         <option value="salgstid">Salgstid (afsluttede handler)*</option>
                     </optgroup>
-                    <optgroup label="Bolig udbud">
+                    <optgroup name="history" label="Bolig udbud" class="display-none">
                         <option value="udbud">Udbud i måneden</option>
                         <option value="nedtagne">Nedtagne i måneden</option>
                         <option value="salg">Solgt i kvartalet*</option>
@@ -113,19 +117,23 @@
                     </select>
                 </span>
 
-                <span lang="en" name="en" class="lang-none">
+                <span lang="en" name="en" class="display-none">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
-                    <optgroup label="Price in DKK/m2">
+                    <optgroup name="ai" label="Price in DKK/m2" class="display-block">
+                        <option value="udbud-pris">Advertised price</option>
+                        <option value="nedtagne-pris">Price at removal time</option>
+                    </optgroup>
+                    <optgroup name="history" label="Price in DKK/m2" class="display-none">
                         <option value="udbud-pris">Advertised price</option>
                         <option value="nedtagne-pris">Price at removal time</option>
                         <option value="pris">Actual trading price*</option>
                     </optgroup>
-                    <optgroup label="Sales time in days">
+                    <optgroup name="history" label="Sales time in days" class="display-none">
                         <option value="udbud-tid">Advertisement time (homes for sale)</option>
                         <option value="nedtagne-tid">Advertisement time (homes removed, not for sale)</option>
                         <option value="salgstid">Actual sales time*</option>
                     </optgroup>
-                    <optgroup label="Supply of homes">
+                    <optgroup name="history" label="Supply of homes" class="display-none">
                         <option value="udbud">Supply during month</option>
                         <option value="nedtagne">Removed during month</option>
                         <option value="salg">Actual sales during quarter*</option>
@@ -138,7 +146,7 @@
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                <label for="location"><span lang="dk" name="dk" class="lang-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="lang-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
+                <label for="location"><span lang="dk" name="dk" class="display-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="display-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>
@@ -189,11 +197,11 @@
         <br><span id="diagram-message" class="alert"></span>
         
         <hr>
-        <svg viewBox="0 0 966 400" id="mg-multiline"></svg>
+        <svg viewBox="0 0 823 300" id="mg-multiline"></svg>
         
 <!--        <div class="is-center">
-            <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="lang-none">Historisk data</span><span lang="en" name="en" class="lang-block">Historic data</span></button>
-            <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="lang-none">Prognoser - på vej!</span><span lang="en" name="en" class="lang-block">Predictions - coming!</span></button> 
+            <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="display-none">Historisk data</span><span lang="en" name="en" class="display-block">Historic data</span></button>
+            <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="display-none">Prognoser - på vej!</span><span lang="en" name="en" class="display-block">Predictions - coming!</span></button> 
         </div>-->
     </div>
     
@@ -207,32 +215,32 @@
                     <i class="fas fa-robot"></i>
                     boligrobot.dk
                 </h3>
-                <p><span lang="dk" name="dk" class="lang-block">
-                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="lang-none">Boligrobot.dk is a new site where you can soon get predictions on Danish houses, apartments and summer houses. Technical requirement is an updated internet browser.</span> 
+                <p><span lang="dk" name="dk" class="display-block">
+                    Boligrobot.dk er et nyt site, hvor du snart kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can soon get predictions on Danish houses, apartments and summer houses. Technical requirement is an updated internet browser.</span> 
                 </p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
                     <i class="fas fa-info"></i>AI
                 </h3>
-                <p><span lang="dk" name="dk" class="lang-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.</span><span lang="en" name="en" class="lang-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.</span></p>
+                <p><span lang="dk" name="dk" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.</span></p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
-                    <span lang="dk" name="dk" class="lang-block"><i class="fas fa-tachometer-alt"></i> Præcision</span><span lang="en" name="en" class="lang-none"> <i class="fas fa-tachometer-alt"></i>Precision</span>
+                    <span lang="dk" name="dk" class="display-block"><i class="fas fa-tachometer-alt"></i> Præcision</span><span lang="en" name="en" class="display-none"> <i class="fas fa-tachometer-alt"></i>Precision</span>
                 </h3>
-                <p><span lang="dk" name="dk" class="lang-block">Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal.</span><span lang="en" name="en" class="lang-none">Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers.</span></p>
+                <p><span lang="dk" name="dk" class="display-block">Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal.</span><span lang="en" name="en" class="display-none">Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers.</span></p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
-                    <span lang="dk" name="dk" class="lang-block"><i class="fas fa-umbrella"></i> Statistik</span><span lang="en" name="en" class="lang-none"><i class="fas fa-umbrella"></i> Statistics</span>
+                    <span lang="dk" name="dk" class="display-block"><i class="fas fa-umbrella"></i> Statistik</span><span lang="en" name="en" class="display-none"><i class="fas fa-umbrella"></i> Statistics</span>
                 </h3>
-                <p><span lang="dk" name="dk" class="lang-block">Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret. Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).</span><span lang="en" name="en" class="lang-none">You should pay particular attention to the differences between actually traded prices and prices advertised. Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).</span></p>
+                <p><span lang="dk" name="dk" class="display-block">Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret. Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).</span><span lang="en" name="en" class="display-none">You should pay particular attention to the differences between actually traded prices and prices advertised. Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).</span></p>
             </div>
         </div>
         
-        <p id="info-1"><span lang="dk" name="dk" class="lang-block">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
-        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="lang-none">
+        <p id="info-1"><span lang="dk" name="dk" class="display-block">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
+        <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="display-none">
         The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button></span>
         </p>

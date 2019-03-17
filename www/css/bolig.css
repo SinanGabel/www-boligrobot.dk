@@ -347,11 +347,11 @@ a:hover {
 }
 
 
-.lang-block {
+.display-block {
     display: block;
 }
 
-.lang-none {
+.display-none {
     display: none;
 }
 
