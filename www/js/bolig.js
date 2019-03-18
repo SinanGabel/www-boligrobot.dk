@@ -293,37 +293,23 @@ function updateLocation(omr) {
 
 function omraadeX2(omr, t) {
     
-    return (omr.map(c => (t + c))).concat(omr);
+    if (forecasting) {
+    
+    return _.flatten(omr.map(c => [t + c, c]));
+    
+    } else {
+        
+        return omr;
+    }
 }
 
 
 // ...
 
 function makeData(obj, select) {
-
-    if (graphdata.length > 0) {
+          
+    omraadeX2(select, ahead).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
         
-        if (forecasting) {
-            
-            makeDataX(obj, omraadeX2(select, ahead));
-        
-        } else {
-        
-            makeDataX(obj, select);            
-        }
-        
-    } else {
-        
-        if (forecasting) {
-        
-            omraadeX2(select, ahead).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
-        
-        } else {
-
-            select.forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });            
-        }    
-    }
-    
     return graphdata;
 }   
 
@@ -464,6 +450,8 @@ function mgMultiLine(id, data, legend, title) {
     let margin = {"left": 120, "right": 220};
     let size = {"width": 483, "height": 300};
     
+    let omr = omraadeX2(legend, ahead);
+    
     // viewBox = "0 0 (size.width+margin.left+margin.right) 300"
             
     MG.data_graphic({
@@ -474,10 +462,10 @@ function mgMultiLine(id, data, legend, title) {
         height: size.height,
         right: margin.right,
         target: ('#' + id),
-        legend: ((forecasting) ? omraadeX2(legend, ahead) : legend),
+        legend: omr,
         x_accessor: 't',
         x_extended_ticks: true,
-        y_accessor: (((forecasting) ? _.range(0, 2*legend.length) : legend)).map((c,i) => ("v"+i)),
+        y_accessor: omr.map((c,i) => ("v"+i)),
         min_y_from_data: true
     });  
 }
@@ -631,6 +619,11 @@ function statistics(m, type) {
     
     m = m || document.getElementById("metric").value;
     type = type ||document.getElementById("boligtype").value;
+    
+    if (forecasting && ! ["udbud-pris", "nedtagne-pris"].includes(m)) {
+        
+        m = "udbud-pris";
+    }
         
     setOptionValue("metric", m);
     setOptionValue("boligtype", type);
@@ -822,6 +815,8 @@ function multiLine(id, data) {
 
 function aiReset(c) {
     
+    graphdata = [];  // ahead = "1M-" locations data is not present in the historic data therefore a reset here
+    
     if (c === "ai") {
         
         document.getElementById("radio-ai").checked = true;
@@ -829,6 +824,7 @@ function aiReset(c) {
         forecasting = true;
         
         toggleDisplay("history", "ai")
+        
         
     } else {
 
@@ -838,6 +834,8 @@ function aiReset(c) {
         
         toggleDisplay("ai", "history")
     }
+    
+    statistics();
 }
 
 
