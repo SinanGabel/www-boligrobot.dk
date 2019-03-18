@@ -309,6 +309,8 @@ function omraadeX2(omr, t) {
 function makeData(obj, select) {
           
     omraadeX2(select, ahead).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
+    
+    graphdata = (_.isEmpty(graphdata)) ? [] : _.orderBy(graphdata, ["t"]) ;
         
     return graphdata;
 }   
@@ -452,6 +454,8 @@ function mgMultiLine(id, data, legend, title) {
     
     let omr = omraadeX2(legend, ahead);
     
+    let y_acc = omr.map((c,i) => ("v"+i));
+    
     // viewBox = "0 0 (size.width+margin.left+margin.right) 300"
             
     MG.data_graphic({
@@ -465,9 +469,80 @@ function mgMultiLine(id, data, legend, title) {
         legend: omr,
         x_accessor: 't',
         x_extended_ticks: true,
-        y_accessor: omr.map((c,i) => ("v"+i)),
+        y_accessor: y_acc,
         min_y_from_data: true
     });  
+    
+    
+    // table of numbers
+    
+    let t_y_acc = ["t"].concat(y_acc);
+        
+    makeTable("table-of-numbers", ([["t"].concat(omr)]).concat(graphdata.map(o => t_y_acc.map(c => o[c])).reverse()) );
+    
+    // Compare with same-as-last
+    
+    if (forecasting) { 
+    
+        let gf = graphdata.filter(c => c && c.hasOwnProperty("v0") && c.hasOwnProperty("v1"));
+        
+        let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v0) : -1)).filter(c => c>=0)));
+
+        let mean_abs_diff_1M = Number.parseInt(_.mean(gf.map((c,i,a) => Math.abs(c.v1 - c.v0)).filter(c => c>=0)));    
+        
+        // add text
+        
+        let pe = document.createElement("p");
+        
+        let mark = "The following information is currently only provided for the first location, " + legend[0] + ". ";
+        
+        mark += "Same-as-last prediction uncertainty: " +  mean_abs_diff_lag + " (" + Number.parseFloat(100 * mean_abs_diff_lag/_.mean(gf.map(c => c.v1))).toFixed(1) + " percent)" +
+            ", and the 1-month-ahead AI prediction uncertainty: " + mean_abs_diff_1M + " (" + Number.parseFloat(100 * mean_abs_diff_1M/_.mean(gf.map(c => c.v0))).toFixed(1) + " percent)" + ". Smallest uncertainty is best. Numbers are in DKK/m2. More information is upcoming, please return!";
+        
+        pe.textContent = mark;
+        
+        document.getElementById("table-of-numbers").appendChild(pe);
+        
+        
+        // TODO loop over these scatter diagrams per pair of omr
+        
+        MG.data_graphic({
+            title: "Prognose præcision (prediction precision)",
+            data: gf,
+            chart_type: 'point', 
+            least_squares: true,
+            width: 400,
+            height: 400,
+            right: 10,
+            target: '#diagram-scatter1',
+            x_accessor: 'v0',
+            y_accessor: 'v1',
+            //mouseover: function(d, i) { console.log(d,i); },
+            y_rug: true
+        });
+        
+        // ..
+        
+        MG.data_graphic({
+            title: "Prognose præcision (prediction precision)",
+            data: gf.map((c) => ({"v0": c.v0, "vy": c.v1-c.v0})),
+            chart_type: 'point', 
+            least_squares: true,
+            width: 400,
+            height: 400,
+            right: 10,
+            target: '#diagram-scatter2',
+            x_accessor: 'v0',
+            y_accessor: 'vy',
+            //mouseover: function(d, i) { console.log(d,i); },
+            y_rug: true
+        });
+        
+    } else {
+        
+        document.getElementById("diagram-scatter1").textContent = "";
+        document.getElementById("diagram-scatter2").textContent = "";
+    } 
 }
 
 
@@ -808,6 +883,64 @@ function multiLine(id, data) {
     svg.node();
 
 //     d3.select(window).on('resize', resize);     
+}
+
+
+/*
+  . id: DOM id
+  . m: matrix with header in first row
+
+*/
+function makeTable(id, m, cls) {
+
+    cls = cls || "pure-table pure-table-striped";
+    
+    var header = m.shift();
+    header = ["#"].concat(header);  // add counter element
+
+	var table = document.createElement("table"),
+	    thd = document.createElement("thead"),
+	    tb = document.createElement("tbody"),
+		root, tr, td, trs,th,
+		i=0, j=0,
+		l=m.length, ll=0;
+
+	for (i = 0; i < l; i++) {
+		tr = document.createElement("tr");
+		trs = ([i]).concat(m[i]);  // i is a row counter
+		ll = trs.length;
+		
+		for (j = 0; j < ll; j++) {
+		   td = document.createElement("td");
+		   td.textContent = trs[j];
+		   tr.appendChild(td);
+		}
+		tb.appendChild(tr);
+	}
+	
+	// header
+    tr = document.createElement("tr");
+
+	header.forEach((c) => {
+        
+        th = document.createElement("th");
+          th.textContent = c;
+        tr.appendChild(th);
+    });
+	
+    thd.appendChild(tr);
+    
+	// ...
+	table.appendChild(thd);
+    
+	table.appendChild(tb);
+	
+	// if l>2500 td: padding 6px
+	if (l < 2500) {table.setAttribute("class", cls); }
+	
+	root = document.getElementById(id);
+    root.textContent = "";  // reset
+    root.appendChild(table);
 }
 
 
