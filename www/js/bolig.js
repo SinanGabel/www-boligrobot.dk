@@ -483,7 +483,9 @@ function mgMultiLine(id, data, legend, title) {
     // Compare with same-as-last
     
     if (forecasting) { 
-    
+
+        document.getElementById("precision-box").className = "pure-g display-block";        
+        
         let gf = graphdata.filter(c => c && c.hasOwnProperty("v0") && c.hasOwnProperty("v1"));
         
         let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v0) : -1)).filter(c => c>=0)));
@@ -491,23 +493,24 @@ function mgMultiLine(id, data, legend, title) {
         let mean_abs_diff_1M = Number.parseInt(_.mean(gf.map((c,i,a) => Math.abs(c.v1 - c.v0)).filter(c => c>=0)));    
         
         // add text
+                
+        document.getElementById("precision-text-location").textContent = legend[0];
+
         
-        let pe = document.createElement("p");
+        document.getElementById("precision-text-aslast-pct").textContent = Number.parseFloat(100 * mean_abs_diff_lag/_.mean(gf.map(c => c.v1))).toFixed(1);
         
-        let mark = "The following information is currently only provided for the first location, " + legend[0] + ". ";
+        document.getElementById("precision-text-aslast").textContent = mean_abs_diff_lag;
+
         
-        mark += "Same-as-last prediction uncertainty: " +  mean_abs_diff_lag + " (" + Number.parseFloat(100 * mean_abs_diff_lag/_.mean(gf.map(c => c.v1))).toFixed(1) + " percent)" +
-            ", and the 1-month-ahead AI prediction uncertainty: " + mean_abs_diff_1M + " (" + Number.parseFloat(100 * mean_abs_diff_1M/_.mean(gf.map(c => c.v0))).toFixed(1) + " percent)" + ". Smallest uncertainty is best. Numbers are in DKK/m2. More information is upcoming, please return!";
-        
-        pe.textContent = mark;
-        
-        document.getElementById("table-of-numbers").appendChild(pe);
-        
+        document.getElementById("precision-text-1M-pct").textContent = Number.parseFloat(100 * mean_abs_diff_1M/_.mean(gf.map(c => c.v0))).toFixed(1);
+
+        document.getElementById("precision-text-1M").textContent = mean_abs_diff_1M;
+
         
         // TODO loop over these scatter diagrams per pair of omr
         
         MG.data_graphic({
-            title: "Prognose præcision (prediction precision)",
+            title: "(1) Præcision (precision)",
             data: gf,
             chart_type: 'point', 
             least_squares: true,
@@ -524,7 +527,7 @@ function mgMultiLine(id, data, legend, title) {
         // ..
         
         MG.data_graphic({
-            title: "Prognose præcision (prediction precision)",
+            title: "(2) Præcision (precision)",
             data: gf.map((c) => ({"v0": c.v0, "vy": c.v1-c.v0})),
             chart_type: 'point', 
             least_squares: true,
@@ -542,6 +545,8 @@ function mgMultiLine(id, data, legend, title) {
         
         document.getElementById("diagram-scatter1").textContent = "";
         document.getElementById("diagram-scatter2").textContent = "";
+
+        document.getElementById("precision-box").className = "pure-g display-none";        
     } 
 }
 

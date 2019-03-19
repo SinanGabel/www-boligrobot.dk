@@ -203,10 +203,31 @@
             <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="display-none">Historisk data</span><span lang="en" name="en" class="display-block">Historic data</span></button>
             <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="display-none">Prognoser - på vej!</span><span lang="en" name="en" class="display-block">Predictions - coming!</span></button> 
         </div>-->
+        <div id="precision-box" class="pure-g display-block">
+            <hr>
+            <div class="l-box pure-u-1 pure-u-xl-1-3"><p>
+              <span lang="dk" name="dk" class="display-block">Følgende grafik er for første lokation:</span><span lang="en" name="en" class="display-none">The following information is (currently) provided for the first location:</span> <span id="precision-text-location"></span>. <span lang="dk" name="dk" class="display-block">AI prognose usikkerheden er:</span><span lang="en" name="en" class="display-none">The AI prediction uncertainty is:</span> <span id="precision-text-1M-pct"></span> <span lang="dk" name="dk" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-1M"></span> <span lang="dk" name="dk" class="display-block">DKK/m2, og den simple samme-som-sidste-pris prognose usikkerhed er:</span><span lang="en" name="en" class="display-none">DKK/m2 and the simple same-as-last-price prediction uncertainty is:</span> <span id="precision-text-aslast-pct"></span> <span lang="dk" name="dk" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-aslast"></span> <span lang="dk" name="dk" class="display-block">DKK/m2. Mindst usikkerhed er bedst.</span><span lang="en" name="en" class="display-none">DKK/m2. Smallest uncertainty is best.</span>
+              
+              <br><br>
+              
+              <span lang="dk" name="dk" class="display-block">Punkterne i Figur (1) skal helst ligge på en 45 graders linie, det betyder at prognoserne er præcise.</span> 
+              <span lang="en" name="en" class="display-none">The points in Figure (1) should lie on a 45 degree line to have precise predictions.</span>
+
+              <br><br>
+              
+              <span lang="dk" name="dk" class="display-block">I Figur (2) skal punkterne helst ligge tæt på y-aksens nulpunkt (0), hvor y-aksen måler forskellen på den realiserede (faktiske) pris og prognose-prisen.</span> 
+              <span lang="en" name="en" class="display-none">In Figure (2) the points should be close to the y-axis value of zero (0), the y-axis measures the difference between the realised price and the prediction price.</span>
+              
+              </p>
+            </div>        
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-xl-1-3" id="diagram-scatter1">
+            </div>     
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-xl-1-3" id="diagram-scatter2">
+            </div>        
+        </div>
         
-        <div id="table-of-numbers"></div>        
-        <div id="diagram-scatter1"></div>
-        <div id="diagram-scatter2"></div>
+        <hr>
+        <div id="table-of-numbers"></div> 
 
     </div>
     
