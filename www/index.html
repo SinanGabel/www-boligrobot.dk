@@ -25,7 +25,7 @@
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading">boligrobot.dk&#8480; beta</a>
+        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">beta 2019-03-20</span></a>
 
         <ul class="pure-menu-list">
 <!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
@@ -37,12 +37,50 @@
 <br>
 
 <div class="content-wrapper">
+    
     <div id="content-diagram" class="content">
+        
         <h2 class="content-head is-center">
-            <span lang="dk" name="dk" class="display-block">Kunstig intelligens boligpris prognoser</span>
+            <span lang="da" name="da" class="display-block">Kunstig intelligens boligpris prognoser</span>
             <span lang="en" name="en" class="display-none">Artificial Intelligence (AI) home price predictions</span>
         </h2>    
         <br>
+        
+<!--         Introduction -->
+        
+         <div class="pure-g">
+            <div class="tb-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+
+                <h3 class="content-subhead">
+                    <i class="fas fa-robot"></i>
+                    boligrobot.dk
+                </h3>
+                <p><span lang="da" name="da" class="display-block">
+                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. <br><br>Du kan vælge en eller flere boligområder, som fremkommer på diagrammet. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and summer houses.<br><br>You can select one or more home locations which will display in the chart. Technical requirement is an updated internet browser.</span> 
+                </p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <i class="fas fa-info"></i>AI
+                </h3>
+                <p><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>De foreløbige resultater ser gode ud, oftest er AI prognoserne noget bedre end en simpel samme-som-sidst pris-prognose.<br><br>Det tyder på at AI modellen faktisk fanger bevægelsesmønstrer i boligpriserne. Mere AI arbejde skal gøres og prognoser længere ud i fremtiden skal testes.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>The preliminary results look good, most often the AI forecasts are somewhat better than a simple same-as-last price forecast.<br><br>It seems that the AI model actually captures movements (patterns) in house prices. More AI work must be done and forecasts further out into the future must be tested.</span></p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <span lang="da" name="da" class="display-block"><i class="fas fa-tachometer-alt"></i> Præcision</span><span lang="en" name="en" class="display-none"> <i class="fas fa-tachometer-alt"></i>Precision</span>
+                </h3>
+                <p><span lang="da" name="da" class="display-block">Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal.<br><br>En indikation af prognose præcisionen vises nedenfor i forbindelse med diagrammet.</span><span lang="en" name="en" class="display-none">Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers.<br><br>An indication of the forecast accuracy is shown below in connection with the chart.</span></p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <span lang="da" name="da" class="display-block"><i class="fas fa-umbrella"></i> Statistik</span><span lang="en" name="en" class="display-none"><i class="fas fa-umbrella"></i> Statistics</span>
+                </h3>
+                <p><span lang="da" name="da" class="display-block">Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret.<br><br>Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).</span><span lang="en" name="en" class="display-none">You should pay particular attention to the differences between actually traded prices and prices advertised.<br><br>Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).</span></p>
+            </div>
+        </div>
+        <hr>
+        
+<!--         Continue -->
         
         <form class="pure-form pure-g">
             <fieldset>
@@ -53,22 +91,22 @@
                 <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-ai" class="radio"><span lang="dk" name="dk" class="display-block">AI prognoser</span><span lang="en" name="en" class="display-none">AI predictions</span>
-                            <input type="radio" name="ai-select" value="ai" id="radio-ai" class="radio pure-u-23-24 " onclick="aiReset('ai');" checked></label>
+                            <label for="radio-ai" class="radio"><span lang="da" name="da" class="display-block">AI prognoser</span><span lang="en" name="en" class="display-none">AI predictions</span>
+                            <input type="radio" name="ai-select" value="ai" id="radio-ai" class="radio pure-u-23-24 " onclick="aiRadioReset('ai');" checked></label>
                         </div>
             
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-history" class="radio"><span lang="dk" name="dk" class="display-block">Historisk data</span><span lang="en" name="en" class="display-none">Historic data</span>
-                            <input type="radio" name="ai-select" value="history" id="radio-history" class="radio pure-u-23-24" onclick="aiReset('history');"></label>
+                            <label for="radio-history" class="radio"><span lang="da" name="da" class="display-block">Historisk data</span><span lang="en" name="en" class="display-none">Historic data</span>
+                            <input type="radio" name="ai-select" value="history" id="radio-history" class="radio pure-u-23-24" onclick="aiRadioReset('history');"></label>
                         </div>
                 </div>
             
             
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                    <label for="boligtype"><span lang="dk" name="dk" class="display-block">Boligtype</span><span lang="en" name="en" class="display-none">Home type</span></label>
+                    <label for="boligtype"><span lang="da" name="da" class="display-block">Boligtype</span><span lang="en" name="en" class="display-none">Home type</span></label>
                 </div>
                 <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
-                    <span lang="dk" name="dk" class="display-block">
+                    <span lang="da" name="da" class="display-block">
                         <select id="boligtype" onchange="setAction();graphdata=[];statistics(null, this.value);">
                         <option value="lejlighed">Lejlighed</option>
                         <option value="hus">Hus</option>
@@ -83,17 +121,17 @@
                         </select>
                     </span>
                 
-<!--                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="dk" name="dk" class="display-block">Lejlighed</span><span lang="en" name="en" class="display-none">Apartment</span></button>
-                    <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="dk" name="dk" class="display-block">Hus</span><span lang="en" name="en" class="display-none">House</span></button>
-                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="dk" name="dk" class="display-block">Fritidshus</span><span lang="en" name="en" class="display-none">Summer house</span></button>                -->
+<!--                    <button id="button-lejlighed" class="pure-button active"  value="lejlighed" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'lejlighed');"><span lang="da" name="da" class="display-block">Lejlighed</span><span lang="en" name="en" class="display-none">Apartment</span></button>
+                    <button id="button-hus" class="pure-button"  value="hus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'hus');"><span lang="da" name="da" class="display-block">Hus</span><span lang="en" name="en" class="display-none">House</span></button>
+                    <button id="button-fritidshus" class="pure-button"  value="fritidshus" onclick="setAction();graphdata=[];this.className='pure-button active';statistics(null, 'fritidshus');"><span lang="da" name="da" class="display-block">Fritidshus</span><span lang="en" name="en" class="display-none">Summer house</span></button>                -->
                 </div>
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
-                <label for="metric"><span lang="dk" name="dk" class="display-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="display-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
+                <label for="metric"><span lang="da" name="da" class="display-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="display-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
-                <span lang="dk" name="dk" class="display-block">
+                <span lang="da" name="da" class="display-block">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
                     <optgroup name="ai" label="Pris i DKK pr. m2" class="display-block">
                         <option value="udbud-pris">Udbudspris</option>
@@ -146,7 +184,7 @@
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                <label for="location"><span lang="dk" name="dk" class="display-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="display-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
+                <label for="location"><span lang="da" name="da" class="display-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="display-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>
@@ -188,7 +226,24 @@
                 <optgroup id="zip" label="Postnummer (zip code)">
                 </optgroup>
                 </select>
-                <button id="reset" type="button" class="pure-button reset" onclick="updateLocation('reset');this.className='pure-button reset-active';">Reset</button>
+                <button id="reset" type="button" class="pure-button reset" onclick="updateLocation('reset');this.className='pure-button reset-active';"><span lang="da" name="da" class="display-block">Nulstil område</span><span lang="en" name="en" class="display-none">Location Reset</span></button>
+                </div>
+                
+<!--                 Show more information -->
+                <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
+                     &nbsp;
+                </div>
+                <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
+                
+                        <div class="pure-u-1 pure-u-sm-1-6">
+                            <label for="check-table" class="radio"><span lang="da" name="da" class="display-block">Tabel</span><span lang="en" name="en" class="display-none">Table</span>
+                            <input type="checkbox" id="check-table" class="radio pure-u-23-24 " onclick="toggleCheckBox('table-box');"></label>
+                        </div>
+            
+                        <div class="pure-u-1 pure-u-sm-1-6" id="precision-check" class="display-block">
+                            <label for="check-precision" class="radio"><span lang="da" name="da" class="display-block">Præcision</span><span lang="en" name="en" class="display-none">Precision</span>
+                            <input type="checkbox" id="check-precision" class="radio pure-u-23-24" onclick="toggleCheckBox('precision-box');"></label>
+                        </div>
                 </div>
                 
             </fieldset>
@@ -200,22 +255,22 @@
         <svg viewBox="0 0 823 300" id="mg-multiline"></svg>
         
 <!--        <div class="is-center">
-            <button id="data-history" class="pure-button" value="history" onclick=""><span lang="dk" name="dk" class="display-none">Historisk data</span><span lang="en" name="en" class="display-block">Historic data</span></button>
-            <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="dk" name="dk" class="display-none">Prognoser - på vej!</span><span lang="en" name="en" class="display-block">Predictions - coming!</span></button> 
+            <button id="data-history" class="pure-button" value="history" onclick=""><span lang="da" name="da" class="display-none">Historisk data</span><span lang="en" name="en" class="display-block">Historic data</span></button>
+            <button id="data-forecast" class="pure-button active" value="forecast" onclick="" disabled><span lang="da" name="da" class="display-none">Prognoser - på vej!</span><span lang="en" name="en" class="display-block">Predictions - coming!</span></button> 
         </div>-->
-        <div id="precision-box" class="pure-g display-block">
+        <div id="precision-box" class="pure-g display-none">
             <hr>
-            <div class="l-box pure-u-1 pure-u-xl-1-3"><p>
-              <span lang="dk" name="dk" class="display-block">Følgende grafik er for første lokation:</span><span lang="en" name="en" class="display-none">The following information is (currently) provided for the first location:</span> <span id="precision-text-location"></span>. <span lang="dk" name="dk" class="display-block">AI prognose usikkerheden er:</span><span lang="en" name="en" class="display-none">The AI prediction uncertainty is:</span> <span id="precision-text-1M-pct"></span> <span lang="dk" name="dk" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-1M"></span> <span lang="dk" name="dk" class="display-block">DKK/m2, og den simple samme-som-sidste-pris prognose usikkerhed er:</span><span lang="en" name="en" class="display-none">DKK/m2 and the simple same-as-last-price prediction uncertainty is:</span> <span id="precision-text-aslast-pct"></span> <span lang="dk" name="dk" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-aslast"></span> <span lang="dk" name="dk" class="display-block">DKK/m2. Mindst usikkerhed er bedst.</span><span lang="en" name="en" class="display-none">DKK/m2. Smallest uncertainty is best.</span>
+            <div class="tb-box pure-u-1 pure-u-xl-1-3"><p>
+              <span lang="da" name="da" class="display-block">Følgende grafik er for første lokation:</span><span lang="en" name="en" class="display-none">The following information is (currently) provided for the first location:</span> <span id="precision-text-location"></span>. <span lang="da" name="da" class="display-block">AI prognose usikkerheden er:</span><span lang="en" name="en" class="display-none">The AI prediction uncertainty is:</span> <span id="precision-text-1M-pct"></span> <span lang="da" name="da" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-1M"></span> <span lang="da" name="da" class="display-block">DKK/m2, og den simple samme-som-sidste-pris prognose usikkerhed er:</span><span lang="en" name="en" class="display-none">DKK/m2 and the simple same-as-last-price prediction uncertainty is:</span> <span id="precision-text-aslast-pct"></span> <span lang="da" name="da" class="display-block">procent eller</span><span lang="en" name="en" class="display-none">percent or</span> <span id="precision-text-aslast"></span> <span lang="da" name="da" class="display-block">DKK/m2. Mindst usikkerhed er bedst.</span><span lang="en" name="en" class="display-none">DKK/m2. Smallest uncertainty is best.</span>
               
               <br><br>
               
-              <span lang="dk" name="dk" class="display-block">Punkterne i Figur (1) skal helst ligge på en 45 graders linie, det betyder at prognoserne er præcise.</span> 
+              <span lang="da" name="da" class="display-block">Punkterne i Figur (1) skal helst ligge på en 45 graders linie, det betyder at prognoserne er præcise.</span> 
               <span lang="en" name="en" class="display-none">The points in Figure (1) should lie on a 45 degree line to have precise predictions.</span>
 
               <br><br>
               
-              <span lang="dk" name="dk" class="display-block">I Figur (2) skal punkterne helst ligge tæt på y-aksens nulpunkt (0), hvor y-aksen måler forskellen på den realiserede (faktiske) pris og prognose-prisen.</span> 
+              <span lang="da" name="da" class="display-block">I Figur (2) skal punkterne helst ligge tæt på y-aksens nulpunkt (0), hvor y-aksen måler forskellen på den realiserede (faktiske) pris og prognose-prisen.</span> 
               <span lang="en" name="en" class="display-none">In Figure (2) the points should be close to the y-axis value of zero (0), the y-axis measures the difference between the realised price and the prediction price.</span>
               
               </p>
@@ -226,56 +281,31 @@
             </div>        
         </div>
         
-        <hr>
-        <div id="table-of-numbers"></div> 
-
-    </div>
+        
+        <div id="table-box" class="display-none"><hr><div id="table-of-numbers"></div></div> 
     
+                
+        <p id="info-1"><span lang="da" name="da" class="display-block">
+        I diagrammet betyder "1M-" prognose en måned frem. Tidligere prognoser vises også i diagrammet, så man kan se præcisionen. Der laves forudsigelser på tre boligpristyper: (1) Første bolig-udbudspris ved annonceringstidspunktet; (2) Bolig-nedtagningspris ved annonceringssluttidspunktet; (3) Den faktiske handelspris (ikke publiceret endnu på site't).<br><br>
         
-    <div class="content">
-    <hr>
-        <div class="pure-g">
-            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-
-                <h3 class="content-subhead">
-                    <i class="fas fa-robot"></i>
-                    boligrobot.dk
-                </h3>
-                <p><span lang="dk" name="dk" class="display-block">
-                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and summer houses. Technical requirement is an updated internet browser.</span> 
-                </p>
-            </div>
-            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <h3 class="content-subhead">
-                    <i class="fas fa-info"></i>AI
-                </h3>
-                <p><span lang="dk" name="dk" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.</span></p>
-            </div>
-            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <h3 class="content-subhead">
-                    <span lang="dk" name="dk" class="display-block"><i class="fas fa-tachometer-alt"></i> Præcision</span><span lang="en" name="en" class="display-none"> <i class="fas fa-tachometer-alt"></i>Precision</span>
-                </h3>
-                <p><span lang="dk" name="dk" class="display-block">Kan jeg stole på prognose tallene? Nej, boligrobot.dk er i beta så stol kun på de realiserede historiske tal.</span><span lang="en" name="en" class="display-none">Can I trust the predictions? No, boligrobot.dk is in beta so trust only the actual realised historical numbers.</span></p>
-            </div>
-            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <h3 class="content-subhead">
-                    <span lang="dk" name="dk" class="display-block"><i class="fas fa-umbrella"></i> Statistik</span><span lang="en" name="en" class="display-none"><i class="fas fa-umbrella"></i> Statistics</span>
-                </h3>
-                <p><span lang="dk" name="dk" class="display-block">Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret. Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).</span><span lang="en" name="en" class="display-none">You should pay particular attention to the differences between actually traded prices and prices advertised. Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).</span></p>
-            </div>
-        </div>
+        Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).<br><br>
         
-        <p id="info-1"><span lang="dk" name="dk" class="display-block">Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).
+        Google Colab med Nvidia grafikkort (GPU) med TensorFlow og Keras benyttes til AI modellering, AI træning og AI forudsigelser. Når AI modellen trænes så tager en enkelt træningsgennemgang af al data (en "epoch") cirka 1 time på en almindelig bærbar computer, men med GPU'en reduceres dette til nogle få sekunder. Denne forøgelse i beregningshastighed er nødvendig da flere tusinde træningsgennemgange foretages, hver gang nye data er tilgængelige.   
+        
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="display-none">
-        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).
+        In the chart, "1M" means forecast one month ahead. Earlier forecasts are also shown in the chart, so you can see the accuracy. Predictions are made on three housing price types: (1) First housing offer price at the time of the advertising announcement; (2) Housing price at the end of the advertising period; (3) The actual trading price (not yet published on this site).<br><br>
+        
+        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).<br><br>
+        
+        Google Colab with Nvidia graphics card (GPU) with TensorFlow and Keras is used for AI modeling, AI training and AI predictions. When the AI model is trained, a single training loop (one epoch) of all data takes about 1 hour on a regular laptop, but with the GPU this is reduced to a few seconds. This increase in computational speed is necessary as several thousands of epochs are done each time new data is available.
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button></span>
         </p>
 
-    </div>
+  </div>
         
     <br><br><br><br>
 
-    <div class="footer l-box is-center">
+    <div class="footer tb-box is-center">
         Copyright 2019 Sinan Gabel. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
     </div>
 

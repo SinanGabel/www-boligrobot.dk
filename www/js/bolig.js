@@ -105,7 +105,7 @@ function message(id, txt, t) {
 }
 
 
-// toggleDisplay("dk", "en") or toggleDisplay("en", "dk")
+// toggleDisplay("da", "en") or toggleDisplay("en", "da")
 
 function toggleDisplay(fra, til) {
     
@@ -126,11 +126,28 @@ function changeLanguage(l) {
     
     if (dk) {
         
-        toggleDisplay("en", "dk");
+        toggleDisplay("en", "da");
         
     } else {
         
-        toggleDisplay("dk", "en");
+        toggleDisplay("da", "en");
+    }
+}
+
+
+// ...
+
+function toggleCheckBox(id) {
+    
+    let root = document.getElementById(id);
+
+    if ((id === "precision-box") ? document.getElementById("check-precision").checked : document.getElementById("check-table").checked ) {
+        
+        root.className = (id === "precision-box") ? "pure-g display-block" : "display-block" ;
+        
+    } else {
+        
+        root.className = (id === "precision-box") ? "pure-g display-none" : "display-none" ;
     }
 }
 
@@ -456,6 +473,9 @@ function mgMultiLine(id, data, legend, title) {
     
     let y_acc = omr.map((c,i) => ("v"+i));
     
+//     let marker = [{"t": new Date(), "label": "today"}];
+
+    
     // viewBox = "0 0 (size.width+margin.left+margin.right) 300"
             
     MG.data_graphic({
@@ -471,20 +491,19 @@ function mgMultiLine(id, data, legend, title) {
         x_extended_ticks: true,
         y_accessor: y_acc,
         min_y_from_data: true
+//         markers: ((forecasting) ? marker : null) 
     });  
     
     
     // table of numbers
-    
+        
     let t_y_acc = ["t"].concat(y_acc);
         
     makeTable("table-of-numbers", ([["t"].concat(omr)]).concat(graphdata.map(o => t_y_acc.map(c => o[c])).reverse()) );
-    
-    // Compare with same-as-last
+        
+    // Precision information
     
     if (forecasting) { 
-
-        document.getElementById("precision-box").className = "pure-g display-block";        
         
         let gf = graphdata.filter(c => c && c.hasOwnProperty("v0") && c.hasOwnProperty("v1"));
         
@@ -951,13 +970,15 @@ function makeTable(id, m, cls) {
 
 // ...
 
-function aiReset(c) {
+function aiRadioReset(c) {
     
     graphdata = [];  // ahead = "1M-" locations data is not present in the historic data therefore a reset here
     
     if (c === "ai") {
         
         document.getElementById("radio-ai").checked = true;
+        
+        document.getElementById("precision-check").className = "display-block"; 
         
         forecasting = true;
         
@@ -968,6 +989,8 @@ function aiReset(c) {
 
         document.getElementById("radio-history").checked = true;
         
+        document.getElementById("precision-check").className = "display-none"; 
+
         forecasting = false; 
         
         toggleDisplay("ai", "history")

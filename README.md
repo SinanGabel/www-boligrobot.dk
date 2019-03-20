@@ -2,7 +2,7 @@
 
 Web site for boligrobot.dk
 
-Providing home prices (currently Danish houses, apartments, summer houses)  down to zip code level and soon AI home price predictions.
+Providing home prices - currently Danish houses, apartments, summer houses - down to zip code level (500+ zip codes) and AI home price predictions down to commune level (100+ communes and regions).
 
 
 <hr>

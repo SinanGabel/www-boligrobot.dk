@@ -64,6 +64,12 @@ a:hover {
     padding: 1em;
 }
 
+.tb-box {
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+
 .l-box-lrg {
     padding: 2em;
     border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -353,6 +359,10 @@ a:hover {
 
 .display-none {
     display: none;
+}
+
+.version {
+    font-size: 0.7em;
 }
 
 
