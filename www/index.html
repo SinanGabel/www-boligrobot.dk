@@ -17,6 +17,10 @@
 </head>
 <body>
 
+<!--[if IE]>
+Microsoft Internet Explorer browser - cannot be used, please use a modern browser - kan ikke bruges, brug venligst en moderne browser
+<![endif]-->
+
 <div id="action">
     <div id="loading-icon"></div>
     <div class="loading-msg" id="msg"></div>
@@ -25,7 +29,7 @@
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">beta 2019-03-20</span></a>
+        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">beta 2019-03-21</span></a>
 
         <ul class="pure-menu-list">
 <!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
@@ -56,14 +60,14 @@
                     boligrobot.dk
                 </h3>
                 <p><span lang="da" name="da" class="display-block">
-                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark. <br><br>Du kan vælge en eller flere boligområder, som fremkommer på diagrammet. Teknisk krav er en opdateret internet browser.</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and summer houses.<br><br>You can select one or more home locations which will display in the chart. Technical requirement is an updated internet browser.</span> 
+                    Boligrobot.dk er et nyt site, hvor du kan få prognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark.<br><br>Du kan vælge en eller flere boligområder, som fremkommer på diagrammet og i tabellen (hvis valgt).<br><br>Teknisk krav er en moderne og opdateret internet browser (Microsoft Internet Explorer kan ikke bruges).</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can get predictions on Danish houses, apartments and summer houses.<br><br>You can select one or more home locations which will display in the chart and table (if checked).<br><br>Technical requirement is a modern and updated internet browser (Microsoft Internet Explorer will not work).</span> 
                 </p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
                     <i class="fas fa-info"></i>AI
                 </h3>
-                <p><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>De foreløbige resultater ser gode ud, oftest er AI prognoserne noget bedre end en simpel samme-som-sidst pris-prognose.<br><br>Det tyder på at AI modellen faktisk fanger bevægelsesmønstrer i boligpriserne. Mere AI arbejde skal gøres og prognoser længere ud i fremtiden skal testes.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>The preliminary results look good, most often the AI forecasts are somewhat better than a simple same-as-last price forecast.<br><br>It seems that the AI model actually captures movements (patterns) in house prices. More AI work must be done and forecasts further out into the future must be tested.</span></p>
+                <p><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>De foreløbige resultater ser gode ud, dog skal AI prognoserne generelt være bedre end en simpel samme-som-sidst pris-prognose.<br><br>Det tyder på at AI modellen faktisk fanger bevægelsesmønstrer i boligpriserne. Mere AI arbejde skal gøres og prognoser længere ud i fremtiden skal testes.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>The preliminary results look good though the AI forecasts must generally remain better than a simple same-as-last price forecast.<br><br>It seems that the AI model actually captures movements (patterns) in house prices. More AI work must be done and forecasts further out into the future must be tested.</span></p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
@@ -128,7 +132,7 @@
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
-                <label for="metric"><span lang="da" name="da" class="display-block">Bolig-statistik <i class="fas fa-info-circle" title="(*) betyder data er kvartalsvis, ellers er data månedlig."></i></span><span lang="en" name="en" class="display-none">Home statistics <i class="fas fa-info-circle" title="(*) means that data is quarterly, else monthly."></i></span></label>
+                <label for="metric"><span lang="da" name="da" class="display-block">Bolig-statistik</span><span lang="en" name="en" class="display-none">Home statistics</span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                 <span lang="da" name="da" class="display-block">
@@ -184,7 +188,7 @@
 <!--                 locations.map((c) => {return '<option value="' + c + '">' + c + '</option>'; }).join('') -->
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
-                <label for="location"><span lang="da" name="da" class="display-block">Område <i class="fas fa-info-circle" title="Postnummer niveau findes kun for kvartalsdata, det er Bolig-statistik (ovenfor) markeret med en *"></i></span><span lang="en" name="en" class="display-none">Location <i class="fas fa-info-circle" title="Zip code level only exists for Home statistics (above) marked with an *"></i></span></label>
+                <label for="location"><span lang="da" name="da" class="display-block">Område</span><span lang="en" name="en" class="display-none">Location</span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 <select id="location" onchange="document.getElementById('reset').className='pure-button reset';setAction();updateLocation(this.value);">
                 <option value="vaelg">Vælg område (select location)</option>

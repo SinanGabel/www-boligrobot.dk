@@ -1,6 +1,14 @@
 "use strict";
 
 
+// ...
+
+if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
+  
+    alert("Microsoft Internet Explorer browser - kan ikke bruges, brug venligst en moderne browser - cannot be used, please use a modern browser");
+}
+
+
 // name: Aarhus (geo), value: Århus (udb, bm)
 
 var storage={}, dates={}, omraade=[], omraade2x=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
@@ -306,6 +314,8 @@ function updateLocation(omr) {
 
 // select == omraade
 
+// NOTE 1M- first, then actual price, and so on
+
 // TODO possibly make var instead
 
 function omraadeX2(omr, t) {
@@ -503,11 +513,14 @@ function mgMultiLine(id, data, legend, title) {
         
     // Precision information
     
+    // v0: 1M-
+    // v1: actual    refer to: omraadeX2()
+    
     if (forecasting) { 
         
         let gf = graphdata.filter(c => c && c.hasOwnProperty("v0") && c.hasOwnProperty("v1"));
         
-        let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v0) : -1)).filter(c => c>=0)));
+        let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v1) : -1)).filter(c => c>=0)));
 
         let mean_abs_diff_1M = Number.parseInt(_.mean(gf.map((c,i,a) => Math.abs(c.v1 - c.v0)).filter(c => c>=0)));    
         
