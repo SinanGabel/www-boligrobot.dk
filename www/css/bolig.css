@@ -60,15 +60,15 @@ a:hover {
  * -- LAYOUT STYLES --
  * These are some useful classes which I will need
  */
+
 .l-box {
-    padding: 1em;
+    padding: 0;
 }
 
 .tb-box {
     padding-bottom: 1em;
     padding-top: 1em;
 }
-
 
 .l-box-lrg {
     padding: 2em;
@@ -257,7 +257,6 @@ a:hover {
     min-height: 12%;
     z-index: 2;
     background: white;
-
 }
 
 /* We want to give the content area some more padding */
@@ -402,13 +401,19 @@ a:hover {
     .splash-head {
         font-size: 250%;
     }
-
+    
+    .l-box {
+        padding: 0.2em;
+    }
 
     /* We remove the border-separator assigned to .l-box-lrg */
     .l-box-lrg {
         border: none;
     }
-
+    
+    .content-wrapper {
+        margin-left: 1em;
+    }
 }
 
 /*
@@ -420,5 +425,9 @@ a:hover {
     /* We increase the header font size even more */
     .splash-head {
         font-size: 300%;
+    }
+    
+    .l-box {
+        padding: 1em;
     }
 }

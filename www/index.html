@@ -29,7 +29,7 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">beta 2019-03-21</span></a>
+        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">beta 2019-03-27</span></a>
 
         <ul class="pure-menu-list">
 <!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
@@ -44,11 +44,11 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
     
     <div id="content-diagram" class="content">
         
-        <h2 class="content-head is-center">
+<!--        <h2 class="content-head is-center">
             <span lang="da" name="da" class="display-block">Kunstig intelligens boligpris prognoser</span>
             <span lang="en" name="en" class="display-none">Artificial Intelligence (AI) home price predictions</span>
         </h2>    
-        <br>
+        <br>-->
         
 <!--         Introduction -->
         
@@ -67,7 +67,7 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
                 <h3 class="content-subhead">
                     <i class="fas fa-info"></i>AI
                 </h3>
-                <p><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>De foreløbige resultater ser gode ud, dog skal AI prognoserne generelt være bedre end en simpel samme-som-sidst pris-prognose.<br><br>Det tyder på at AI modellen faktisk fanger bevægelsesmønstrer i boligpriserne. Mere AI arbejde skal gøres og prognoser længere ud i fremtiden skal testes.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>The preliminary results look good though the AI forecasts must generally remain better than a simple same-as-last price forecast.<br><br>It seems that the AI model actually captures movements (patterns) in house prices. More AI work must be done and forecasts further out into the future must be tested.</span></p>
+                <p><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>De foreløbige resultater ser gode ud. AI prognoserne skal generelt være bedre end en simpel samme-som-sidst pris-prognose.<br><br>Det tyder på at AI modellen faktisk fanger bevægelsesmønstrer i boligpriserne. Mere AI arbejde skal gøres og prognoser længere ud i fremtiden skal testes.</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>The preliminary results look good. The AI forecasts must generally remain better than a simple same-as-last price forecast.<br><br>It seems that the AI model actually captures movements (patterns) in house prices. More AI work must be done and forecasts further out into the future must be tested.</span></p>
             </div>
             <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
                 <h3 class="content-subhead">
@@ -138,23 +138,26 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
                 <span lang="da" name="da" class="display-block">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
                     <optgroup name="ai" label="Pris i DKK pr. m2" class="display-block">
-                        <option value="udbud-pris">Udbudspris</option>
-                        <option value="nedtagne-pris">Nedtagningspris</option>
+                        <option value="qpris">Realiseret handelspris</option>
+                        <option value="qudbud-pris">Realiseret udbudspris</option>
+                        <option value="qnedtagne-pris">Realiseret nedtagningspris</option>
                     </optgroup>
                     <optgroup name="history" label="Pris i DKK pr. m2" class="display-none">
-                        <option value="udbud-pris">Udbudspris</option>
-                        <option value="nedtagne-pris">Nedtagningspris</option>
-                        <option value="pris">Handelspris*</option>
+                        <option value="qpris">Realiseret handelspris</option>
+                        <option value="qudbud-pris">Realiseret udbudspris</option>
+                        <option value="qnedtagne-pris">Realiseret nedtagningspris</option>
+                        <option value="udbud-pris">Internet udbudspris</option>
+                        <option value="nedtagne-pris">Internet nedtagningspris</option>
                     </optgroup>
                     <optgroup name="history" label="Salgstid i dage" class="display-none">
-                        <option value="udbud-tid">Udbudstid (til salg)</option>
-                        <option value="nedtagne-tid">Liggetid (nedtagne, ikke til salg)</option>
-                        <option value="salgstid">Salgstid (afsluttede handler)*</option>
+                        <option value="salgstid">Realiseret salgstid</option>
+                        <option value="udbud-tid">Internet udbudstid (til salg)</option>
+                        <option value="nedtagne-tid">Internet liggetid (nedtagne, ikke til salg)</option>
                     </optgroup>
                     <optgroup name="history" label="Bolig udbud" class="display-none">
-                        <option value="udbud">Udbud i måneden</option>
-                        <option value="nedtagne">Nedtagne i måneden</option>
-                        <option value="salg">Solgt i kvartalet*</option>
+                        <option value="salg">Realiseret salg i kvartalet</option>
+                        <option value="udbud">Internet udbud i måneden</option>
+                        <option value="nedtagne">Internet nedtagne i måneden</option>
                     </optgroup>
                     </select>
                 </span>
@@ -162,23 +165,26 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
                 <span lang="en" name="en" class="display-none">
                     <select id="metric" onchange="setAction();graphdata=[];statistics(this.value, null);">
                     <optgroup name="ai" label="Price in DKK/m2" class="display-block">
-                        <option value="udbud-pris">Advertised price</option>
-                        <option value="nedtagne-pris">Price at removal time</option>
+                        <option value="qpris">Actual trading price</option>
+                        <option value="qudbud-pris">Actual first offer price</option>
+                        <option value="qnedtagne-pris">Actual removal price</option>
                     </optgroup>
                     <optgroup name="history" label="Price in DKK/m2" class="display-none">
-                        <option value="udbud-pris">Advertised price</option>
-                        <option value="nedtagne-pris">Price at removal time</option>
-                        <option value="pris">Actual trading price*</option>
+                        <option value="qpris">Actual trading price</option>
+                        <option value="qudbud-pris">Actual first offer price</option>
+                        <option value="qnedtagne-pris">Actual removal price</option>
+                        <option value="udbud-pris">Internet first offer price</option>
+                        <option value="nedtagne-pris">Internet removal price</option>
                     </optgroup>
                     <optgroup name="history" label="Sales time in days" class="display-none">
-                        <option value="udbud-tid">Advertisement time (homes for sale)</option>
-                        <option value="nedtagne-tid">Advertisement time (homes removed, not for sale)</option>
-                        <option value="salgstid">Actual sales time*</option>
+                        <option value="salgstid">Actual sales time</option>
+                        <option value="udbud-tid">Internet advertisement time, active</option>
+                        <option value="nedtagne-tid">Internet advertisement time, ended</option>
                     </optgroup>
                     <optgroup name="history" label="Supply of homes" class="display-none">
-                        <option value="udbud">Supply during month</option>
-                        <option value="nedtagne">Removed during month</option>
-                        <option value="salg">Actual sales during quarter*</option>
+                        <option value="salg">Actual sales during quarter</option>
+                        <option value="udbud">Internet supply during month</option>
+                        <option value="nedtagne">Internet removals during month</option>
                     </optgroup>
                     </select>
                 </span>
@@ -290,18 +296,18 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
     
                 
         <p id="info-1"><span lang="da" name="da" class="display-block">
-        I diagrammet betyder "1M-" prognose en måned frem. Tidligere prognoser vises også i diagrammet, så man kan se præcisionen. Der laves forudsigelser på tre boligpristyper: (1) Første bolig-udbudspris ved annonceringstidspunktet; (2) Bolig-nedtagningspris ved annonceringssluttidspunktet; (3) Den faktiske handelspris (ikke publiceret endnu på site't).<br><br>
+        I diagrammet betyder "*" foran områdenavnet at det er prognoser. Tidligere prognoser vises også i diagrammet, så man kan se præcisionen. Der laves forudsigelser på tre boligpristyper, som alle stammer fra realiserede handler.<br><br>
         
-        Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, findes ikke på postnummer niveau. Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).<br><br>
+        Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, og findes ikke på postnummer niveau. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).<br><br>
         
-        Google Colab med Nvidia grafikkort (GPU) med TensorFlow og Keras benyttes til AI modellering, AI træning og AI forudsigelser. Når AI modellen trænes så tager en enkelt træningsgennemgang af al data (en "epoch") cirka 1 time på en almindelig bærbar computer, men med GPU'en reduceres dette til nogle få sekunder. Denne forøgelse i beregningshastighed er nødvendig da flere tusinde træningsgennemgange foretages, hver gang nye data er tilgængelige.   
+        Google Colab med Nvidia grafikkort (GPU) med TensorFlow og Keras benyttes til AI modellering, AI træning og AI forudsigelser. Når AI modellen trænes så tager en enkelt træningsgennemgang af al data (en "epoch") cirka 1 time på en almindelig bærbar computer, men med GPU'en reduceres dette til nogle få sekunder. Denne forøgelse i beregningshastighed er nødvendig da flere hundrede træningsgennemgange foretages, hver gang nye data er tilgængelige.   
         
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="display-none">
-        In the chart, "1M" means forecast one month ahead. Earlier forecasts are also shown in the chart, so you can see the accuracy. Predictions are made on three housing price types: (1) First housing offer price at the time of the advertising announcement; (2) Housing price at the end of the advertising period; (3) The actual trading price (not yet published on this site).<br><br>
+        In the chart a "*" in front of the location name means that it is a forecast. Earlier forecasts are also shown in the chart, so you can see the accuracy. Predictions are made on three housing price types where the underlying data stem from actual home trades.<br><br>
         
-        The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).<br><br>
+        The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).<br><br>
         
-        Google Colab with Nvidia graphics card (GPU) with TensorFlow and Keras is used for AI modeling, AI training and AI predictions. When the AI model is trained, a single training loop (one epoch) of all data takes about 1 hour on a regular laptop, but with the GPU this is reduced to a few seconds. This increase in computational speed is necessary as several thousands of epochs are done each time new data is available.
+        Google Colab with Nvidia graphics card (GPU) with TensorFlow and Keras is used for AI modeling, AI training and AI predictions. When the AI model is trained, a single training loop (one epoch) of all data takes about 1 hour on a regular laptop, but with the GPU this is reduced to a few seconds. This increase in computational speed is necessary as hundreds of training epochs are done each time new data is available.
         <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button></span>
         </p>
 

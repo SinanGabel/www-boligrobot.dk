@@ -13,13 +13,13 @@ if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgen
 
 var storage={}, dates={}, omraade=[], omraade2x=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
 
-var forecasting = true;
+var forecasting = true, forecasting_switch = true;
 
 const regex = /[0-9]/g;
 
 const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
 
-const ahead = "1M-";
+const ahead = "*";
 
 // var init_viewBox = true;
 
@@ -235,7 +235,7 @@ function preprocess(ar) {
                 
         if (forecasting) {
             
-            ex[c] = data[c].map((b) => {return [b[1],b[2]]});
+            ex[c] = data[c].filter(b => ["03","06","09","12"].includes(b[1].substring(5,7))).map((b) => {return [b[1],b[2]]});
             ex[ahead + c] = data[c].map((b) => {return [datePlus(b[1]),b[3]]});   // WARNING 1M currently wrong date therefore this datePlus()
                         
         } else {
@@ -487,8 +487,8 @@ function mgMultiLine(id, data, legend, title) {
 
     
     // viewBox = "0 0 (size.width+margin.left+margin.right) 300"
-            
-    MG.data_graphic({
+    
+    let obj = {
         title: title,
         data: data.map((c) => { return Object.assign({}, c, {"t": new Date(c.t)}); }),
         left: margin.left,
@@ -502,8 +502,23 @@ function mgMultiLine(id, data, legend, title) {
         y_accessor: y_acc,
         min_y_from_data: true
 //         markers: ((forecasting) ? marker : null) 
-    });  
+    };
+            
+    if (forecasting) {
+        
+        Object.assign(obj, {active_point_on_lines: true, active_point_size: 2, active_point_accessor: 'v0'});
+        
+        forecasting_switch = true;
     
+    } else if (forecasting_switch) {
+
+        document.getElementById(id).textContent = "";
+        
+        forecasting_switch = false;
+    }
+    
+    
+    MG.data_graphic(obj);  
     
     // table of numbers
         
@@ -616,7 +631,7 @@ function makeRequestObject(f, m, type) {
         
     // kvartalsdata
         
-    bm = (["salg","salgstid","pris"].includes(m)) ? true : false ; 
+    bm = (["qpris", "qudbud-pris", "qnedtagne-pris", "salg","salgstid"].includes(m)) ? true : false ; 
     
     // Forecasts or Historic information
     
@@ -636,11 +651,18 @@ function makeRequestObject(f, m, type) {
     
     // ...
     
-    if (["pris", "udbud-pris", "nedtagne-pris"].includes(m)) {
+    if (["qpris", "qudbud-pris", "qnedtagne-pris", "udbud-pris", "nedtagne-pris"].includes(m)) {
+        
+        if (["qpris", "qudbud-pris", "qnedtagne-pris"].includes(m)) {
+            
+            m = m.substring(1);
+        }
+            
+        // ...    
         
         y_legend = "DKK pr. m2 (price/m2)";
                         
-        if (bm) {
+        if (bm && ! f) {
         
             id = type + "-realiseret-" + m; 
             
@@ -655,16 +677,15 @@ function makeRequestObject(f, m, type) {
             filnavn = id + ".csv";
             
             title = "Internet " + ((m === "udbud-pris") ? "udbudspris" : "nedtagningspris") + ", DKK pr. m2 (price/m2)";
-            
-        } else if (f && ["udbud-pris", "nedtagne-pris"].includes(m)) {
+                        
+        } else if (f) {
 
             id = type + "-prognose-" + m; 
 
             filnavn = id + ".csv";
             
-            title = "Prognose " + ((m === "udbud-pris") ? "udbudspris" : "nedtagningspris") + ", DKK pr. m2 (price/m2)";
+            title = "Prognose " + m + ", DKK pr. m2 (price/m2)";
         }
-        
         
         obj = {"id": id, "file": filnavn, "delimiter": "|", "title": title, "y_legend": y_legend, "diagram": "mg-multiline"};
 
@@ -732,9 +753,9 @@ function statistics(m, type) {
     m = m || document.getElementById("metric").value;
     type = type ||document.getElementById("boligtype").value;
     
-    if (forecasting && ! ["udbud-pris", "nedtagne-pris"].includes(m)) {
+    if (forecasting && ! ["qpris", "qudbud-pris", "qnedtagne-pris", "udbud-pris", "nedtagne-pris"].includes(m)) {
         
-        m = "udbud-pris";
+        m = "qpris";
     }
         
     setOptionValue("metric", m);
@@ -1035,7 +1056,7 @@ function init() {
         
         omraade = ["Hele landet"];
         
-        statistics("udbud-pris", "lejlighed");
+        statistics("qpris", "lejlighed");
 
         
 //         clearAction();
