@@ -346,8 +346,8 @@ function makeDataX(obj, select) {
 
         console.log("No data for: ", select[select.length-1]); 
         
-        omraade.pop();  // remove last element
-
+        select.pop();  // remove last element
+        
         return; 
     }
     
