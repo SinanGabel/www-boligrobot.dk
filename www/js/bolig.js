@@ -15,11 +15,14 @@ var storage={}, dates={}, omraade=[], omraade2x=[], graphdata=[], locations=[], 
 
 var forecasting = true, forecasting_switch = true;
 
-const regex = /[0-9]/g;
+const REGEX = /[0-9]/g;
 
-const host = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
+const HOST = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
+//const HOST = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/test/";
 
-const ahead = "*";
+const AHEAD = "*";
+
+const TIME_AHEAD = 6;
 
 // var init_viewBox = true;
 
@@ -160,37 +163,25 @@ function toggleCheckBox(id) {
 }
 
 
-// plus 1
+// "yyyy-mm-dd" plus x
 
-function datePlus(d) {
+// datePlus("2018-12-30",2) => "2019-02-28"
+
+// datePlus("2018-12-30",6) => "2019-06-30"
+
+function datePlus(d, x) {
+
+    x = x || 1;
     
     let dt = d.split("-");
-    
-    if (dt[1] === "01") {
-        
-        dt[1] = "02";
-        dt[2] = "28";
-        
-    } else if (dt[1] === "02") {
-        
-        dt[1] = "03";
-        dt[2] = "30";
 
-    } else if (dt[1] === "12") {
-        
-        dt[0] = Number(dt[0]) + 1;
-        dt[1] = "01";
-        dt[2] = "30";
-        
-    } else {
-        
-        dt[1] = Number(dt[1]) + 1 ;  // e.g. "03" + 1 => 4
-        
-        dt[1] = (dt[1] > 9) ? dt[1] : "0" + dt[1] ;
-    }
+    let m = Number(dt[1]) + x - 1; // months m: 0..11
     
-    return dt.join("-");
+    let utcDate = new Date(Date.UTC(Number(dt[0]), m, (((m % 12) === 1) ? 28 : 30)));    
+    
+    return utcDate.toJSON().substring(0,10);
 }
+
 
 
 // ...
@@ -236,7 +227,7 @@ function preprocess(ar) {
         if (forecasting) {
             
             ex[c] = data[c].filter(b => ["03","06","09","12"].includes(b[1].substring(5,7))).map((b) => {return [b[1],b[2]]});
-            ex[ahead + c] = data[c].map((b) => {return [datePlus(b[1]),b[3]]});   // WARNING 1M currently wrong date therefore this datePlus()
+            ex[AHEAD + c] = data[c].map((b) => {return [datePlus(b[1], TIME_AHEAD),b[3]]});   // WARNING 1M currently wrong date therefore this datePlus()
                         
         } else {
             
@@ -335,7 +326,7 @@ function omraadeX2(omr, t) {
 
 function makeData(obj, select) {
           
-    omraadeX2(select, ahead).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
+    omraadeX2(select, AHEAD).forEach((c,i,ar) => { makeDataX(obj, ar.slice(0, i+1)); });
     
     graphdata = (_.isEmpty(graphdata)) ? [] : _.orderBy(graphdata, ["t"]) ;
         
@@ -467,8 +458,6 @@ function draw(obj) {
             clearAction();
         }    
     }
-    
-    
 }
 
 
@@ -479,9 +468,11 @@ function mgMultiLine(id, data, legend, title) {
     let margin = {"left": 120, "right": 220};
     let size = {"width": 483, "height": 300};
     
-    let omr = omraadeX2(legend, ahead);
+    let omr = omraadeX2(legend, AHEAD);
     
     let y_acc = omr.map((c,i) => ("v"+i));
+    
+    let nodata = true;
     
 //     let marker = [{"t": new Date(), "label": "today"}];
 
@@ -531,64 +522,70 @@ function mgMultiLine(id, data, legend, title) {
     // v0: 1M-
     // v1: actual    refer to: omraadeX2()
     
-    if (forecasting) { 
+    if (false || forecasting) { 
         
         let gf = graphdata.filter(c => c && c.hasOwnProperty("v0") && c.hasOwnProperty("v1"));
         
-        let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v1) : -1)).filter(c => c>=0)));
+        nodata = (gf.length > 0) ? false : true ;
+        
+        if (! nodata) {
+        
+            let mean_abs_diff_lag = Number.parseInt(_.mean(gf.map((c,i,a) => ((i>0) ? Math.abs(c.v1 - a[i-1].v1) : -1)).filter(c => c>=0)));
 
-        let mean_abs_diff_1M = Number.parseInt(_.mean(gf.map((c,i,a) => Math.abs(c.v1 - c.v0)).filter(c => c>=0)));    
-        
-        // add text
-                
-        document.getElementById("precision-text-location").textContent = legend[0];
+            let mean_abs_diff_1M = Number.parseInt(_.mean(gf.map((c,i,a) => Math.abs(c.v1 - c.v0)).filter(c => c>=0)));    
+            
+            // add text
+                    
+            document.getElementById("precision-text-location").textContent = legend[0];
 
-        
-        document.getElementById("precision-text-aslast-pct").textContent = Number.parseFloat(100 * mean_abs_diff_lag/_.mean(gf.map(c => c.v1))).toFixed(1);
-        
-        document.getElementById("precision-text-aslast").textContent = mean_abs_diff_lag;
+            
+            document.getElementById("precision-text-aslast-pct").textContent = Number.parseFloat(100 * mean_abs_diff_lag/_.mean(gf.map(c => c.v1))).toFixed(1);
+            
+            document.getElementById("precision-text-aslast").textContent = mean_abs_diff_lag;
 
-        
-        document.getElementById("precision-text-1M-pct").textContent = Number.parseFloat(100 * mean_abs_diff_1M/_.mean(gf.map(c => c.v0))).toFixed(1);
+            
+            document.getElementById("precision-text-1M-pct").textContent = Number.parseFloat(100 * mean_abs_diff_1M/_.mean(gf.map(c => c.v0))).toFixed(1);
 
-        document.getElementById("precision-text-1M").textContent = mean_abs_diff_1M;
+            document.getElementById("precision-text-1M").textContent = mean_abs_diff_1M;
 
-        
-        // TODO loop over these scatter diagrams per pair of omr
-        
-        MG.data_graphic({
-            title: "(1) Præcision (precision)",
-            data: gf,
-            chart_type: 'point', 
-            least_squares: true,
-            width: 400,
-            height: 400,
-            right: 10,
-            target: '#diagram-scatter1',
-            x_accessor: 'v0',
-            y_accessor: 'v1',
-            //mouseover: function(d, i) { console.log(d,i); },
-            y_rug: true
-        });
-        
-        // ..
-        
-        MG.data_graphic({
-            title: "(2) Præcision (precision)",
-            data: gf.map((c) => ({"v0": c.v0, "vy": c.v1-c.v0})),
-            chart_type: 'point', 
-            least_squares: true,
-            width: 400,
-            height: 400,
-            right: 10,
-            target: '#diagram-scatter2',
-            x_accessor: 'v0',
-            y_accessor: 'vy',
-            //mouseover: function(d, i) { console.log(d,i); },
-            y_rug: true
-        });
-        
-    } else {
+            
+            // TODO loop over these scatter diagrams per pair of omr
+            
+            MG.data_graphic({
+                title: "(1) Præcision (precision)",
+                data: gf,
+                chart_type: 'point', 
+                least_squares: true,
+                width: 400,
+                height: 400,
+                right: 10,
+                target: '#diagram-scatter1',
+                x_accessor: 'v0',
+                y_accessor: 'v1',
+                //mouseover: function(d, i) { console.log(d,i); },
+                y_rug: true
+            });
+            
+            // ..
+            
+            MG.data_graphic({
+                title: "(2) Præcision (precision)",
+                data: gf.map((c) => ({"v0": c.v0, "vy": c.v1-c.v0})),
+                chart_type: 'point', 
+                least_squares: true,
+                width: 400,
+                height: 400,
+                right: 10,
+                target: '#diagram-scatter2',
+                x_accessor: 'v0',
+                y_accessor: 'vy',
+                //mouseover: function(d, i) { console.log(d,i); },
+                y_rug: true
+            });
+        }
+    } 
+    
+    if (! forecasting || nodata) {
         
         document.getElementById("diagram-scatter1").textContent = "";
         document.getElementById("diagram-scatter2").textContent = "";
@@ -608,13 +605,18 @@ function dataDraw(obj) {
         
     } else {    
 
-        $.ajax({"method": "GET", "url": host + obj.file, "dataType": "text"}).then((r) => {
-                        
+        $.ajax({"method": "GET", "url": HOST + obj.file, "dataType": "text"}).then((r) => {
+                                    
             r = csvFilter(obj.delimiter, r);
             
             storage[obj.id] = preprocess(r);
                         
             draw(obj);
+
+        }, (err) => {
+
+            console.log(err); 
+
         });
     }
 }  
@@ -1006,13 +1008,15 @@ function makeTable(id, m, cls) {
 
 function aiRadioReset(c) {
     
-    graphdata = [];  // ahead = "1M-" locations data is not present in the historic data therefore a reset here
+    setAction();
+    
+    graphdata = [];  // AHEAD = "*" locations data is not present in the historic data therefore a reset here
     
     if (c === "ai") {
         
         document.getElementById("radio-ai").checked = true;
         
-        document.getElementById("precision-check").className = "display-block"; 
+//         document.getElementById("precision-check").className = "display-block"; 
         
         forecasting = true;
         
@@ -1023,7 +1027,7 @@ function aiRadioReset(c) {
 
         document.getElementById("radio-history").checked = true;
         
-        document.getElementById("precision-check").className = "display-none"; 
+//         document.getElementById("precision-check").className = "display-none"; 
 
         forecasting = false; 
         
@@ -1042,11 +1046,11 @@ function init() {
     
     //setAction();
     
-    $.ajax({"method": "GET", "url": host + "omraader-bm.csv", "dataType": "text", "cache": true}).then((r) => {
-                    
+    $.ajax({"method": "GET", "url": HOST + "omraader-bm.csv", "dataType": "text", "cache": true}).then((r) => {
+                            
         locations = r.split("\n").filter(c => c !== "");
         
-        postnumre = locations.filter(c => (c).match(regex));
+        postnumre = locations.filter(c => (c).match(REGEX));
         
         kommuner = _.difference(locations, postnumre);
         
@@ -1060,6 +1064,10 @@ function init() {
 
         
 //         clearAction();
+    }, (err) => {
+
+            console.log(err); 
+
     });
 }
 
