@@ -17,7 +17,9 @@ cp -R $WWW .
 
 cd www
 
-mv js/bolig.js js/tmp.js
+cat js/bolig.js js/diagram.js > js/tmp.js
+
+rm -fR js/bolig.js js/diagram.js
 
 java -jar $ROOT'/git-private/risk-cloud-functions/common/script/compiler.jar' --compilation_level SIMPLE_OPTIMIZATIONS --js $TEMP'www/js/tmp.js' --js_output_file $TEMP'www/js/bolig.js'
 
@@ -27,6 +29,7 @@ cd $TEMP
 
 tar -cvzf boligrobot.tgz www/
 
-gsutil cp boligrobot.tgz gs://777misc
+gsutil cp boligrobot.tgz gs://7d4cb438-7016-11e9-beba-5b07bd1875af/tmp
+
 
 

@@ -51,6 +51,10 @@ a:hover {
     background:rgb(220,220,220);
 }
 
+p.large {
+    font-size: 1.2em;
+}
+
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
@@ -136,7 +140,7 @@ a:hover {
 }
 
 .pure-button.info {
-    background-color: orangered; 
+    background-color: #2196f3; 
     color: white;
     font-size: 70%;
 }
@@ -305,6 +309,10 @@ a:hover {
   stroke-width: 1;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.info-1 {
+    background-color: aliceblue;
 }
 
 /* action */
