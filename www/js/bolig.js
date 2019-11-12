@@ -13,7 +13,7 @@ if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgen
 
 var storage={}, dates={}, omraade=[], omraade2x=[], graphdata=[], locations=[], postnumre=[], kommuner=[];
 
-var forecasting = true, forecasting_switch = true;
+var forecasting = true, forecasting_switch = true, lang = "da";
 
 const REGEX = /[0-9]/g;
 
@@ -131,17 +131,21 @@ function toggleDisplay(fra, til) {
 
 function changeLanguage(l) {
     
-    let dk = (l.textContent === "Dansk");
+    let da = (l.textContent === "Dansk");
     
-    l.textContent = (dk) ? "English" : "Dansk" ;
+    l.textContent = (da) ? "English" : "Dansk" ;
     
-    if (dk) {
+    if (da) {
         
         toggleDisplay("en", "da");
+        
+        lang = "da";
         
     } else {
         
         toggleDisplay("da", "en");
+        
+        lang = "en";
     }
 }
 
@@ -440,7 +444,9 @@ function makeRequestObject(f, m, type) {
     
     // postnumre findes kun for kvartalsdata
     
-    if (bm) { 
+    // WARNING Ikke brug af postnumre pt.
+    
+    if (false && bm) { 
         
         optionElements("zip", postnumre);
         
@@ -639,7 +645,8 @@ function init() {
         
         kommuner = _.difference(locations, postnumre);
         
-        optionElements("zip", postnumre);
+        // TODO zip removed for now
+        // optionElements("zip", postnumre);
         
         // example diagram
         

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name=author content="Sinan Gabel">
-    <meta name=copyright content="Copyright 2019 Sinan Gabel. All rights reserved.">
+    <meta name=copyright content="Copyright 2019 Innova Financial Solutions ApS. All rights reserved.">
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=default>
 
@@ -14,6 +14,15 @@
     <link rel=stylesheet href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.1/pure-min.css">
     <link rel=stylesheet href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.1/grids-responsive-min.css">
     <link rel="stylesheet" href="css/bolig.css">
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46832560-4"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-46832560-4');
+    </script>
 </head>
 <body>
 
@@ -29,7 +38,7 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">artificial intelligence forecasts to 2020-03-01 using 135 million data points for model training - beta version</span></a>
+        <a class="pure-menu-heading">boligrobot.dk&#8480; <span class="version">AI forecasts using 135 million data points for model training / beta version / forecasts updated 2019-NOV-12</span></a>
 
         <ul class="pure-menu-list">
 <!--             <li class="pure-menu-item"><a href="beta.html" class="pure-menu-link">diagram (beta)</a></li> -->
@@ -64,12 +73,12 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
                 <div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-ai" class="radio"><span lang="da" name="da" class="display-block">AI prognoser</span><span lang="en" name="en" class="display-none">AI predictions</span>
+                            <label for="radio-ai" class="radio"><span lang="da" name="da" class="display-block">AI-prognoser</span><span lang="en" name="en" class="display-none">AI predictions</span>
                             <input type="radio" name="ai-select" value="ai" id="radio-ai" class="radio pure-u-23-24 " onclick="aiRadioReset('ai');" checked></label>
                         </div>
             
                         <div class="pure-u-1 pure-u-sm-1-6">
-                            <label for="radio-history" class="radio"><span lang="da" name="da" class="display-block">Historisk data</span><span lang="en" name="en" class="display-none">Historic data</span>
+                            <label for="radio-history" class="radio"><span lang="da" name="da" class="display-block">Historiske data</span><span lang="en" name="en" class="display-none">Historic data</span>
                             <input type="radio" name="ai-select" value="history" id="radio-history" class="radio pure-u-23-24" onclick="aiRadioReset('history');"></label>
                         </div>
                 </div>
@@ -101,7 +110,7 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
                 
                 <div class="pure-u-1 pure-u-sm-1-4 pure-u-md-5-24 pure-u-lg-4-24">
                 
-                <label for="metric"><span lang="da" name="da" class="display-block">Bolig-statistik</span><span lang="en" name="en" class="display-none">Home statistics</span></label>
+                <label for="metric"><span lang="da" name="da" class="display-block">Boligstatistik</span><span lang="en" name="en" class="display-none">Home statistics</span></label>
                 </div><div class="pure-u-1 pure-u-sm-3-4 pure-u-md-19-24 pure-u-lg-20-24">
                 
                 <span lang="da" name="da" class="display-block">
@@ -273,48 +282,43 @@ Microsoft Internet Explorer browser - cannot be used, please use a modern browse
     
                 
         <p class="info-1" id="info-1">
-            <span lang="da" name="da" class="display-block">
-            I diagrammet betyder "*" foran områdenavnet at det er prognoser. Tidligere prognoser vises også i diagrammet, så man kan se præcisionen. Der laves forudsigelser på tre boligpristyper, som alle stammer fra realiserede handler.<br><br>
+            <span lang="da" name="da" class="display-block"><i class="fas fa-robot"></i>
             
-            Realiseret handelsstatistik for kommuner og postnumre er opdateret kvartalsvis med næsten et kvartals forsinkelse. Internet annonce statistik for kommuner er opdateret hver måned omkring den 8'ende, og findes ikke på postnummer niveau. Grafikken kan tage nogle sekunder om at opdatere. Rå datakilde: Danmarks Statistik (dst.dk) og Finansdanmark (finansdanmark.dk).<br><br>
+            Boligrobot.dk er et nyt site, hvor du kan få op til 12 måneders prisprognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark.<br><br>Du kan vælge en eller flere boligområder, som fremkommer i diagrammet og i tabellen (hvis valgt).<br><br>
             
-            Google Colab med Nvidia grafikkort (GPU) med TensorFlow og Keras benyttes til AI modellering, AI træning og AI forudsigelser. Når AI modellen trænes så tager en enkelt træningsgennemgang af al data (en "epoch") cirka 1 time på en almindelig bærbar computer, men med GPU'en reduceres dette til nogle få sekunder. Denne forøgelse i beregningshastighed er nødvendig da flere hundrede træningsgennemgange foretages, hver gang nye data er tilgængelige.   
+            Teknisk krav er en moderne og opdateret internet browser (Microsoft Internet Explorer kan ikke bruges).<br><br>
             
-            <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="display-none">
-            In the chart a "*" in front of the location name means that it is a forecast. Earlier forecasts are also shown in the chart, so you can see the accuracy. Predictions are made on three housing price types where the underlying data stem from actual home trades.<br><br>
+            Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret.<br><br>Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).<br><br>
             
-            The actual trading statistics for communes and zip codes is updated quarterly with a lag of nearly one quarter. The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).<br><br>
+            I diagrammet betyder * foran områdenavnet, at det er prognoser. Der laves forudsigelser på tre boligpristyper, som alle stammer fra realiserede handler.<br><br>
+            
+            Realiseret handelsstatistik for kommuner og postnumre opdateres kvartalsvis med 3-6 måneders forsinkelse. Internet annoncestatistik for kommuner opdateres hver måned omkring den 8'ende, men findes ikke på postnummer-niveau. Rådatakilder: Danmarks Statistik (dst.dk), Finans Danmark (finansdanmark.dk) og andre.<br><br>
+            
+            Google Colab med Nvidia grafikkort (GPU) med TensorFlow og Keras benyttes til AI-modellering / AI-træning / AI-forudsigelser. Når AI-modellen trænes, så tager en enkelt træningsgennemgang af al data (en "epoch") cirka 1 time på en almindelig bærbar computer, men med GPU'en reduceres dette til nogle få sekunder. Denne forøgelse i beregningshastighed er nødvendig, da flere hundrede træningsgennemgange foretages, hver gang nye data er tilgængelige.   
+            
+            <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Ok</button></span><span lang="en" name="en" class="display-none"><i class="fas fa-robot"></i>
+            
+            Boligrobot.dk is a new site where you can get up to 12 months price predictions on Danish houses, apartments and summer houses.<br><br>You can select one or more home locations which will display in the chart and table (if checked).<br><br>
+            
+            Technical requirement is a modern and updated internet browser (Microsoft Internet Explorer will not work).<br><br>
+            
+            Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>You should pay particular attention to the differences between actually traded prices and prices advertised.<br><br>Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).<br><br>
+            
+            In the chart a * in front of the location name means that it is a forecast. Predictions are made on three housing price types where the underlying data stem from actual home trades.<br><br>
+            
+            The actual trading statistics for communes and zip codes is updated quarterly with a lag of 3-6 months. The internet housing statistics for communes is updated monthly around the 8'th but is not available for zip codes. The diagrams may take a few seconds to update. Raw data source: Statistics Denmark (dst.dk) and Finance Denmark (financedenmark.dk).<br><br>
             
             Google Colab with Nvidia graphics card (GPU) with TensorFlow and Keras is used for AI modeling, AI training and AI predictions. When the AI model is trained, a single training loop (one epoch) of all data takes about 1 hour on a regular laptop, but with the GPU this is reduced to a few seconds. This increase in computational speed is necessary as hundreds of training epochs are done each time new data is available.
             <button type="button" class="pure-button info" onclick="document.getElementById('info-1').style.display='none';">Got it</button>
             </span>
         </p>
 
-        <div class="pure-g">
-            <div class="tb-box pure-u-1 pure-u-md-1-2">
-
-                <h3 class="content-subhead">
-                    <i class="fas fa-robot"></i>
-                    boligrobot.dk
-                </h3>
-                <p class="large"><span lang="da" name="da" class="display-block">
-                    Boligrobot.dk er et nyt site, hvor du kan få op til 12 måneders prisprognoser på parcel-og rækkehuse, ejerlejligheder og fritidshuse i danmark.<br><br>Du kan vælge en eller flere boligområder, som fremkommer i diagrammet og i tabellen (hvis valgt).<br><br>Teknisk krav er en moderne og opdateret internet browser (Microsoft Internet Explorer kan ikke bruges).</span><span lang="en" name="en" class="display-none">Boligrobot.dk is a new site where you can get up to 12 months price predictions on Danish houses, apartments and summer houses.<br><br>You can select one or more home locations which will display in the chart and table (if checked).<br><br>Technical requirement is a modern and updated internet browser (Microsoft Internet Explorer will not work).</span> 
-                </p>
-            </div>
-            <div class="l-box pure-u-1 pure-u-md-1-2">
-                <h3 class="content-subhead">
-                    <i class="fas fa-info"></i>AI
-                </h3>
-                <p class="large"><span lang="da" name="da" class="display-block">Kunstig intelligens (neurale netværk) benyttes af boligrobot.dk til at beregne de forventede fremtidige boligpriser.<br><br>Du bør være særligt opmærksom på forskelle mellem faktisk handlede priser og priser som er annonceret.<br><br>Vær også opmærksom på boligtyper og lokationer: Landsdele, regioner, kommuner, postnumre (mindste områder).</span><span lang="en" name="en" class="display-none">Artifical intelligence (AI or deep learning) is used by boligrobot.dk to predict expected future real estate prices.<br><br>You should pay particular attention to the differences between actually traded prices and prices advertised.<br><br>Also pay attention to housing types and locations: National areas, regions, municipalities, postal codes (smallest areas).</span></p>
-            </div>
-        </div>
-        
   </div>
         
     <br><br><br><br>
 
     <div class="footer tb-box is-center">
-        Copyright 2019 Sinan Gabel. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
+        Copyright 2019 Innova Financial Solutions ApS. All rights reserved. &nbsp;&nbsp;&nbsp;&nbsp;<a href="legal.html">Jura (Terms)</a>
     </div>
 
 </div>

@@ -399,7 +399,7 @@ function makeTable(id, m, cls) {
         
         if (k > 1) {
             
-          th.textContent = (k % 2 === 0) ? ("forecast: " + c) : ("actual: " + c) ;
+          th.textContent = (k % 2 === 0 && forecasting) ? (((lang==="da") ? "Prognoser: " : "Forecasts: ") + c) : (((lang==="da") ? "Historiske: " :"Historical: ") + c) ;
         
         } else {
             
