@@ -17,12 +17,12 @@ var forecasting = true, forecasting_switch = true, lang = "da";
 
 const REGEX = /[0-9]/g;
 
-const HOST = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v1/";
+const HOST = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/www/v2/";
 //const HOST = "https://storage.googleapis.com/ba7e2966-31de-11e9-819c-b3b1d3be419b/test/";
 
 const AHEAD = "*";
 
-const TIME_AHEAD = 6;
+const TIME_AHEAD = 12;
 
 // var init_viewBox = true;
 
@@ -169,9 +169,9 @@ function toggleCheckBox(id) {
 
 // "yyyy-mm-dd" plus x
 
-// datePlus("2018-12-30",2) => "2019-02-28"
+// datePlus("2018-12-30",2) => "-02-28"
 
-// datePlus("2018-12-30",6) => "2019-06-30"
+// datePlus("2018-12-30",6) => "-06-30"
 
 function datePlus(d, x) {
 

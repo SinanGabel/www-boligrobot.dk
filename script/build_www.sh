@@ -21,7 +21,7 @@ cat js/bolig.js js/diagram.js > js/tmp.js
 
 rm -fR js/bolig.js js/diagram.js
 
-java -jar $ROOT'/git-private/risk-cloud-functions/common/script/compiler.jar' --compilation_level SIMPLE_OPTIMIZATIONS --js $TEMP'www/js/tmp.js' --js_output_file $TEMP'www/js/bolig.js'
+java -jar $ROOT'/git-private/compiler.jar' --compilation_level SIMPLE_OPTIMIZATIONS --js $TEMP'www/js/tmp.js' --js_output_file $TEMP'www/js/bolig.js'
 
 rm -fR js/tmp.js
 
